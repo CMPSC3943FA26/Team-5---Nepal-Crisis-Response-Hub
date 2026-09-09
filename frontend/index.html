@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nepal Crisis Response Hub</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+
+<body>
+
+<header>
+    <div class="container nav">
+        <h1>Nepal Crisis Response Hub</h1>
+
+        <nav>
+            <a href="#alerts">Alerts</a>
+            <a href="#resources">Resources</a>
+            <a href="#help">Request Help</a>
+        </nav>
+    </div>
+</header>
+
+<main>
+
+    <section class="hero">
+        <div class="container">
+            <p class="label">Emergency Information & Assistance</p>
+
+            <h2>Reliable information when it matters most.</h2>
+
+            <p>
+                Access crisis alerts, emergency resources, safety information,
+                and assistance during emergencies in Nepal.
+            </p>
+
+            <div class="hero-buttons">
+                <a class="button primary" href="#alerts">View Crisis Alerts</a>
+                <a class="button secondary" href="#help">Request Emergency Help</a>
+            </div>
+        </div>
+    </section>
+
+
+    <section id="alerts" class="section">
+        <div class="container">
+
+            <h2>Current Crisis Alerts</h2>
+
+            <p class="prototype-warning">
+                Prototype demonstration information only.
+            </p>
+
+            <div class="cards">
+
+                <article class="card">
+                    <span class="badge">Demo Alert</span>
+                    <h3>Flood Safety Advisory</h3>
+                    <p>
+                        Residents in flood-prone areas should monitor local
+                        emergency instructions and avoid flooded roads.
+                    </p>
+                </article>
+
+                <article class="card">
+                    <span class="badge">Safety Information</span>
+                    <h3>Emergency Preparedness</h3>
+                    <p>
+                        Keep emergency contacts, drinking water, medication,
+                        and important documents easily accessible.
+                    </p>
+                </article>
+
+            </div>
+        </div>
+    </section>
+
+
+    <section id="resources" class="section alternate">
+        <div class="container">
+
+            <h2>Emergency Resources</h2>
+
+            <div class="cards">
+
+                <article class="card">
+                    <h3>Hospitals</h3>
+                    <p>Locate nearby hospitals and medical facilities.</p>
+                </article>
+
+                <article class="card">
+                    <h3>Shelters</h3>
+                    <p>Find emergency shelters and relief centers.</p>
+                </article>
+
+                <article class="card">
+                    <h3>Emergency Contacts</h3>
+                    <p>Access important emergency contact information.</p>
+                </article>
+
+            </div>
+
+        </div>
+    </section>
+
+
+    <section id="help" class="section">
+        <div class="container form-container">
+
+            <h2>Request Emergency Assistance</h2>
+
+            <p>
+                This form is currently part of the prototype and does not
+                contact real emergency services.
+            </p>
+
+            <form id="helpForm">
+
+                <label for="assistance">
+                    Assistance Type
+                </label>
+
+                <select id="assistance" required>
+                    <option value="">Select assistance</option>
+                    <option>Medical Assistance</option>
+                    <option>Rescue</option>
+                    <option>Food</option>
+                    <option>Shelter</option>
+                    <option>Other</option>
+                </select>
+
+
+                <label for="location">
+                    Location
+                </label>
+
+                <input
+                    id="location"
+                    type="text"
+                    placeholder="Enter your location"
+                    required
+                >
+
+
+                <label for="urgency">
+                    Urgency
+                </label>
+
+                <select id="urgency" required>
+                    <option value="">Select urgency</option>
+                    <option>Low</option>
+                    <option>Medium</option>
+                    <option>High</option>
+                    <option>Critical</option>
+                </select>
+
+
+                <label for="description">
+                    Description
+                </label>
+
+                <textarea
+                    id="description"
+                    rows="5"
+                    placeholder="Describe the assistance needed"
+                    required
+                ></textarea>
+
+
+                <button type="submit">
+                    Submit Prototype Request
+                </button>
+
+                <p id="formMessage"></p>
+
+            </form>
+
+        </div>
+    </section>
+
+</main>
+
+
+<footer>
+    <div class="container">
+        <p>
+            Nepal Crisis Response Hub — CMPSC 3943 Team 5 Prototype
+        </p>
+    </div>
+</footer>
+
+
+<script src="js/app.js"></script>
+
+</body>
+</html>
