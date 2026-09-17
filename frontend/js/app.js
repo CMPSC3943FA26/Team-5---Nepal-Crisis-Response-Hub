@@ -32,3 +32,38 @@ helpForm.addEventListener("submit", function (event) {
 
     helpForm.reset();
 });
+const alertsContainer = document.getElementById("alertsContainer");
+
+if (alertsContainer) {
+    const publishedAlerts =
+        JSON.parse(localStorage.getItem("crisisAlerts")) || [];
+
+    publishedAlerts.forEach(function (crisisAlert) {
+        const alertCard = document.createElement("article");
+        alertCard.classList.add("card");
+
+        const badge = document.createElement("span");
+        badge.classList.add("badge");
+        badge.textContent = "Verified Alert";
+
+        const title = document.createElement("h3");
+        title.textContent = crisisAlert.title;
+
+        const location = document.createElement("p");
+        location.textContent = "Location: " + crisisAlert.location;
+
+        const type = document.createElement("p");
+        type.textContent = "Type: " + crisisAlert.type;
+
+        const description = document.createElement("p");
+        description.textContent = crisisAlert.description;
+
+        alertCard.appendChild(badge);
+        alertCard.appendChild(title);
+        alertCard.appendChild(location);
+        alertCard.appendChild(type);
+        alertCard.appendChild(description);
+
+        alertsContainer.appendChild(alertCard);
+    });
+}

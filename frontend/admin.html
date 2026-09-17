@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin | Nepal Crisis Response Hub</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+
+<body>
+
+<header>
+    <div class="container nav">
+        <h1>Nepal Crisis Response Hub</h1>
+
+        <nav>
+            <a href="index.html">Home</a>
+            <a href="dashboard.html">Dashboard</a>
+            <a href="#publish">Publish Alert</a>
+        </nav>
+    </div>
+</header>
+
+<main>
+
+    <section id="publish" class="section">
+        <div class="container form-container">
+
+            <h2>Publish Verified Crisis Alert</h2>
+
+            <p>
+                Prototype administration page for publishing verified
+                emergency information.
+            </p>
+
+            <form id="alertForm">
+
+                <label for="alertTitle">
+                    Alert Title
+                </label>
+
+                <input
+                    id="alertTitle"
+                    type="text"
+                    placeholder="Example: Flood Warning"
+                    required
+                >
+
+
+                <label for="alertType">
+                    Alert Type
+                </label>
+
+                <select id="alertType" required>
+                    <option value="">Select alert type</option>
+                    <option>Flood</option>
+                    <option>Earthquake</option>
+                    <option>Landslide</option>
+                    <option>Severe Weather</option>
+                    <option>Public Safety</option>
+                    <option>Other</option>
+                </select>
+
+
+                <label for="alertLocation">
+                    Location
+                </label>
+
+                <input
+                    id="alertLocation"
+                    type="text"
+                    placeholder="Example: Kathmandu"
+                    required
+                >
+
+
+                <label for="alertDescription">
+                    Alert Description
+                </label>
+
+                <textarea
+                    id="alertDescription"
+                    rows="5"
+                    placeholder="Enter verified emergency information"
+                    required
+                ></textarea>
+
+
+                <button type="submit">
+                    Publish Prototype Alert
+                </button>
+
+                <p id="alertMessage"></p>
+
+            </form>
+
+        </div>
+    </section>
+
+</main>
+
+<footer>
+    <div class="container">
+        <p>
+            Nepal Crisis Response Hub — CMPSC 3943 Team 5 Prototype
+        </p>
+    </div>
+</footer>
+
+<script src="js/admin.js"></script>
+
+</body>
+</html>
