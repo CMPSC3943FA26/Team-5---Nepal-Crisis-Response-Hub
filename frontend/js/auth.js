@@ -1,3 +1,4 @@
+const ADMIN_EMAIL = "test@example.com";
 const registerForm = document.getElementById("registerForm");
 
 if (registerForm) {
@@ -80,11 +81,17 @@ if (loginForm) {
                 account.password === password
         );
 
-        if (user) {
-            localStorage.setItem(
-                "currentPrototypeUser",
-                JSON.stringify(user)
-            );
+       if (user) {
+
+    const loggedInUser = {
+        ...user,
+        role: user.email === ADMIN_EMAIL ? "admin" : "user"
+    };
+
+    localStorage.setItem(
+        "currentPrototypeUser",
+        JSON.stringify(loggedInUser)
+    );
 
             message.textContent =
                 "Prototype login successful.";

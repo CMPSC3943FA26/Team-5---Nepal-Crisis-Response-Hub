@@ -18,7 +18,7 @@
             <a href="index.html#alerts">Alerts</a>
             <a href="index.html#resources">Resources</a>
             <a href="index.html#help">Request Help</a>
-            <a href="admin.html">Admin</a>
+            <a href="admin.html" class="admin-only">Admin</a>            
             <a href="#" id="logoutButton">Logout</a>
         </nav>
     </div>
@@ -35,43 +35,48 @@
 
         <div class="cards">
 
-            <article class="card">
-                <h3>Request Emergency Help</h3>
-                <p>Submit a new request for medical, rescue, food, or shelter assistance.</p>
-                <a class="button primary" href="index.html#help">
-                    Request Help
-                </a>
-            </article>
+    <article class="card">
+        <h3>Request Emergency Help</h3>
+        <p>
+            Submit a new request for medical, rescue,
+            food, or shelter assistance.
+        </p>
+        <a class="button primary" href="index.html#help">
+            Request Help
+        </a>
+    </article>
 
-            <article class="card">
-                <h3>Track My Requests</h3>
-                <p>View emergency requests saved from this browser.</p>
-                <a class="button primary" href="#requests">
-                    View Requests
-                </a>
-            </article>
+    <article class="card">
+        <h3>Track My Requests</h3>
+        <p>
+            View emergency requests saved from this browser.
+        </p>
+        <a class="button primary" href="#requests">
+            View Requests
+        </a>
+    </article>
 
-                        <article class="card"> 
-                <h3>Crisis Alerts</h3> 
-                <p>View current emergency information and safety notices.</p> 
-                <a class="button primary" href="index.html#alerts"> 
-                    View Alerts 
-                </a> 
-            </article>
+    <article class="card">
+        <h3>Crisis Alerts</h3>
+        <p>
+            View current emergency information and safety notices.
+        </p>
+        <a class="button primary" href="index.html#alerts">
+            View Alerts
+        </a>
+    </article>
 
-            <article class="card">
-                <h3>Manage Crisis Alerts</h3>
+    <article class="card admin-only">
+        <h3>Manage Crisis Alerts</h3>
+        <p>
+            Publish, review, or remove verified prototype crisis alerts.
+        </p>
+        <a class="button primary" href="admin.html">
+            Manage Alerts
+        </a>
+    </article>
 
-                <p>
-                    Publish, review, or remove verified prototype crisis alerts.
-                </p>
-
-                <a class="button primary" href="admin.html">
-                    Manage Alerts
-                </a>
-            </article>
- 
-        </div>
+</div>
 
         <section id="requests" class="section">
 

@@ -9,14 +9,19 @@ helpForm.addEventListener("submit", function (event) {
     const urgency = document.getElementById("urgency").value;
     const description = document.getElementById("description").value;
 
-    const request = {
-        assistance,
-        location,
-        urgency,
-        description,
-        createdAt: new Date().toISOString()
-    };
+    const currentRequestUser =
+    JSON.parse(localStorage.getItem("currentPrototypeUser"));
 
+const request = {
+    assistance,
+    location,
+    urgency,
+    description,
+    userEmail: currentRequestUser
+        ? currentRequestUser.email
+        : null,
+    createdAt: new Date().toISOString()
+};
     const existingRequests =
         JSON.parse(localStorage.getItem("helpRequests")) || [];
 

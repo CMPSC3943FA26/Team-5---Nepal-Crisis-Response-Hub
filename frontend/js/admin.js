@@ -1,3 +1,9 @@
+const currentAdminUser =
+    JSON.parse(localStorage.getItem("currentPrototypeUser"));
+
+if (!currentAdminUser || currentAdminUser.role !== "admin") {
+    window.location.href = "dashboard.html";
+}
 const alertForm = document.getElementById("alertForm");
 const alertMessage = document.getElementById("alertMessage");
 const publishedAlertsContainer =
