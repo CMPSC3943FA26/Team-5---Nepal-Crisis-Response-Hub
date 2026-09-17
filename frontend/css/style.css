@@ -183,3 +183,37 @@ footer {
         padding: 60px 0;
     }
 }
+.auth-page {
+    min-height: calc(100vh - 80px);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 50px 20px;
+}
+
+.auth-card {
+    width: min(500px, 100%);
+    background: white;
+    border: 1px solid #dce1e7;
+    border-radius: 8px;
+    padding: 35px;
+}
+
+.auth-card h2 {
+    margin-top: 0;
+}
+
+.auth-card form {
+    margin-bottom: 20px;
+}
+
+.auth-card a {
+    color: #1f2937;
+    font-weight: bold;
+}
+
+#loginMessage,
+#registerMessage {
+    font-weight: bold;
+    margin-top: 10px;
+}

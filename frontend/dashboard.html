@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard | Nepal Crisis Response Hub</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+
+<body>
+
+<header>
+    <div class="container nav">
+        <h1>Nepal Crisis Response Hub</h1>
+
+        <nav>
+            <a href="index.html">Home</a>
+            <a href="index.html#alerts">Alerts</a>
+            <a href="index.html#resources">Resources</a>
+            <a href="index.html#help">Request Help</a>
+            <a href="#" id="logoutButton">Logout</a>
+        </nav>
+    </div>
+</header>
+
+<main class="section">
+    <div class="container">
+
+        <h2>Welcome, <span id="userName">User</span></h2>
+
+        <p>
+            Manage your emergency assistance activity from your dashboard.
+        </p>
+
+        <div class="cards">
+
+            <article class="card">
+                <h3>Request Emergency Help</h3>
+                <p>Submit a new request for medical, rescue, food, or shelter assistance.</p>
+                <a class="button primary" href="index.html#help">
+                    Request Help
+                </a>
+            </article>
+
+            <article class="card">
+                <h3>Track My Requests</h3>
+                <p>View emergency requests saved from this browser.</p>
+                <a class="button primary" href="#requests">
+                    View Requests
+                </a>
+            </article>
+
+            <article class="card">
+                <h3>Crisis Alerts</h3>
+                <p>View current emergency information and safety notices.</p>
+                <a class="button primary" href="index.html#alerts">
+                    View Alerts
+                </a>
+            </article>
+
+        </div>
+
+        <section id="requests" class="section">
+
+            <h2>My Help Requests</h2>
+
+            <div id="requestList">
+                <p>No requests found.</p>
+            </div>
+
+        </section>
+
+    </div>
+</main>
+
+<script src="js/dashboard.js"></script>
+
+</body>
+</html>
