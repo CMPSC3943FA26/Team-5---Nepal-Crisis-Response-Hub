@@ -115,12 +115,21 @@ if (alertForm) {
         const description =
             document.getElementById("alertDescription").value;
 
+        const severity =
+            document.getElementById("alertSeverity").value;
+
+            
+        const safetyInstructions =
+        document.getElementById("alertSafety").value;
+
 
         const alert = {
             title,
             type,
+            severity,
             location,
             description,
+            safetyInstructions,
             verified: true,
             createdAt: new Date().toISOString()
         };
