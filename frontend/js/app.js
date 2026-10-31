@@ -17,6 +17,7 @@ const request = {
     location,
     urgency,
     description,
+    status: "Pending",
     userEmail: currentRequestUser
         ? currentRequestUser.email
         : null,
