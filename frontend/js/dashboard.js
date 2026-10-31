@@ -68,10 +68,10 @@ const requests = allRequests.filter(function (request) {
                     ${request.description}
                 </p>
 
-                <p>
-                    <strong>Status:</strong>
-                    Pending
-                </p>
+               <p>
+    <strong>Status:</strong>
+    ${request.status || "Pending"}
+</p>
             `;
 
             requestList.appendChild(card);
