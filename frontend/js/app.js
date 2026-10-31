@@ -61,16 +61,40 @@ if (alertsContainer) {
         const type = document.createElement("p");
         type.textContent = "Type: " + crisisAlert.type;
 
+        
+        const severity = document.createElement("p");
+        severity.textContent =
+            "Severity: " + (crisisAlert.severity || "Not specified");
+
         const description = document.createElement("p");
         description.textContent = crisisAlert.description;
+
+        
+        const safetyInstructions = document.createElement("p");
+
+        safetyInstructions.textContent =
+            "Safety Instructions: " +
+            (crisisAlert.safetyInstructions || "Not provided");
+
+
+const publishedDate = document.createElement("p");
+
+publishedDate.textContent =
+    "Published: " +
+    (crisisAlert.createdAt
+        ? new Date(crisisAlert.createdAt).toLocaleString()
+        : "Not available");
 
         alertCard.appendChild(badge);
         alertCard.appendChild(title);
         alertCard.appendChild(location);
         alertCard.appendChild(type);
+        alertCard.appendChild(severity);
         alertCard.appendChild(description);
-
+        alertCard.appendChild(safetyInstructions);
+        alertCard.appendChild(publishedDate);
         alertsContainer.appendChild(alertCard);
+
     });
 }
 

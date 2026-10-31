@@ -60,6 +60,18 @@
                     <option>Public Safety</option>
                     <option>Other</option>
                 </select>
+                
+                <label for="alertSeverity">
+                    Severity Level
+                </label>
+
+                <select id="alertSeverity" required>
+                    <option value="">Select severity</option>
+                    <option value="Low">Low</option>
+                    <option value="Moderate">Moderate</option>
+                    <option value="High">High</option>
+                    <option value="Critical">Critical</option>
+                </select>
 
 
                 <label for="alertLocation">
@@ -84,6 +96,19 @@
                     placeholder="Enter verified emergency information"
                     required
                 ></textarea>
+
+                
+                    <label for="alertSafety">
+                 Safety Instructions
+                    </label>
+
+                    <textarea
+                     id="alertSafety"
+                     rows="4"
+                     placeholder="Enter recommended safety actions"
+                      required
+                ></textarea>
+
 
 
                 <button type="submit">
