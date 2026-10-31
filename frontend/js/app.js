@@ -73,3 +73,22 @@ if (alertsContainer) {
         alertsContainer.appendChild(alertCard);
     });
 }
+
+
+ // Update homepage navigation based on login status
+const authNavLink = document.getElementById("authNavLink");
+
+if (authNavLink) {
+    const loggedInUser = JSON.parse(
+        localStorage.getItem("currentPrototypeUser")
+    );
+
+    if (loggedInUser) {
+        authNavLink.textContent = "Dashboard";
+        authNavLink.href = "dashboard.html";
+    } else {
+        authNavLink.textContent = "Login";
+        authNavLink.href = "login.html";
+    }
+}
+
