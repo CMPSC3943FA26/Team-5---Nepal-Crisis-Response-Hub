@@ -42,6 +42,18 @@ if (!currentUser) {
 const requests = allRequests.filter(function (request) {
     return request.userEmail === currentUser.email;
 });
+
+
+const userRequestIndexes = [];
+
+allRequests.forEach(function (request, originalIndex) {
+    if (request.userEmail === currentUser.email) {
+        userRequestIndexes.push(originalIndex);
+    }
+});
+
+
+
     if (requestList && requests.length > 0) {
 
         requestList.innerHTML = "";
@@ -52,34 +64,113 @@ const requests = allRequests.filter(function (request) {
 
             card.className = "card";
 
-            card.innerHTML = `
-                <h3>Request #${index + 1}</h3>
 
-                <p>
-                    <strong>Assistance:</strong>
-                    ${request.assistance}
-                </p>
+const heading = document.createElement("h3");
+heading.textContent = "Request #" + (index + 1);
+card.appendChild(heading);
 
-                <p>
-                    <strong>Location:</strong>
-                    ${request.location}
-                </p>
+const details = [
+    ["Assistance", request.assistance],
+    ["Location", request.location],
+    ["Urgency", request.urgency],
+    ["Description", request.description],
+    ["Status", request.status || "Pending"]
+];
 
-                <p>
-                    <strong>Urgency:</strong>
-                    ${request.urgency}
-                </p>
+details.forEach(function (detail) {
+    const paragraph = document.createElement("p");
+    const label = document.createElement("strong");
 
-                <p>
-                    <strong>Description:</strong>
-                    ${request.description}
-                </p>
+    label.textContent = detail[0] + ": ";
+    paragraph.appendChild(label);
 
-               <p>
-    <strong>Status:</strong>
-    ${request.status || "Pending"}
-</p>
-            `;
+    paragraph.appendChild(
+        document.createTextNode(detail[1] || "")
+    );
+
+    card.appendChild(paragraph);
+});
+
+
+            
+const editButton = document.createElement("button");
+
+editButton.type = "button";
+editButton.textContent = "Edit Request";
+
+if (request.status === "Completed" ||
+    request.status === "Canceled") {
+    editButton.disabled = true;
+}
+
+editButton.addEventListener("click", function () {
+    const newLocation = prompt(
+        "Update location:",
+        request.location
+    );
+
+    if (newLocation === null) return;
+
+    const newUrgency = prompt(
+        "Update urgency (Low, Medium, High):",
+        request.urgency
+    );
+
+    if (newUrgency === null) return;
+
+    const newDescription = prompt(
+        "Update description:",
+        request.description
+    );
+
+    if (newDescription === null) return;
+
+    const location = newLocation.trim();
+    const urgency = newUrgency.trim();
+    const description = newDescription.trim();
+
+    if (!location || !description ||
+        !["Low", "Medium", "High"].includes(urgency)) {
+        alert(
+            "Enter a location, description, and valid urgency."
+        );
+        return;
+    }
+
+    const allRequests =
+        JSON.parse(localStorage.getItem("helpRequests")) || [];
+
+    
+
+const originalIndex = userRequestIndexes[index];
+
+
+    
+if (
+    Number.isInteger(originalIndex) &&
+    allRequests[originalIndex] &&
+    allRequests[originalIndex].userEmail === currentUser.email &&
+    allRequests[originalIndex].assistance === request.assistance &&
+    allRequests[originalIndex].location === request.location &&
+    allRequests[originalIndex].urgency === request.urgency &&
+    allRequests[originalIndex].description === request.description
+) {
+
+        allRequests[originalIndex].location = location;
+        allRequests[originalIndex].urgency = urgency;
+        allRequests[originalIndex].description = description;
+
+        localStorage.setItem(
+            "helpRequests",
+            JSON.stringify(allRequests)
+        );
+
+        window.location.reload();
+    }
+});
+
+card.appendChild(editButton);
+
 
             requestList.appendChild(card);
         });
