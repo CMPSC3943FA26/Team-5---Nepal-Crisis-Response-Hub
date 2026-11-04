@@ -13,6 +13,13 @@ if (!currentUser) {
         userName.textContent = currentUser.name;
     }
 
+        // Show registration confirmation for volunteers
+    const volunteerCard =
+        document.getElementById("volunteerCard");
+
+    if (volunteerCard) {
+        volunteerCard.hidden = currentUser.role !== "responder";
+    }
 
     // Hide admin features from normal users
     const adminOnlyElements =

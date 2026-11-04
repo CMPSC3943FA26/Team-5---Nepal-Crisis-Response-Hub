@@ -38,10 +38,13 @@ if (registerForm) {
             return;
         }
 
-        users.push({
+            users.push({
             name: name,
             email: email,
-            password: password
+            password: password,
+            role: document.getElementById("registerVolunteer")?.checked
+            ? "responder"
+            : "user"
         });
 
         localStorage.setItem(
@@ -85,7 +88,9 @@ if (loginForm) {
 
     const loggedInUser = {
         ...user,
-        role: user.email === ADMIN_EMAIL ? "admin" : "user"
+      role: user.email === ADMIN_EMAIL
+        ? "admin"
+    : (user.role === "responder" ? "responder" : "user")
     };
 
     localStorage.setItem(
