@@ -306,6 +306,47 @@
 
 <section id="missingPersons" class="section">
     <div class="container">
+
+        
+<h2>Report a Missing Person</h2>
+
+<p>
+    Submit a fictional missing-person report for
+    classroom demonstration only.
+</p>
+
+<form id="missingPersonForm">
+    <label for="missingPersonName">Person's Name</label>
+    <input
+        type="text"
+        id="missingPersonName"
+        placeholder="Example: Demo Person D"
+        required
+    >
+
+    <label for="missingPersonLocation">Last Known Location</label>
+    <input
+        type="text"
+        id="missingPersonLocation"
+        placeholder="Example: Kathmandu"
+        required
+    >
+
+    <label for="missingPersonDescription">Description</label>
+    <textarea
+        id="missingPersonDescription"
+        placeholder="Enter fictional identifying details"
+        required
+    ></textarea>
+
+    <button type="submit">
+        Submit Missing-Person Report
+    </button>
+
+    <p id="missingPersonMessage" role="status"></p>
+</form>
+
+
         <h2>Search Missing-Person Reports</h2>
 
         <p>
