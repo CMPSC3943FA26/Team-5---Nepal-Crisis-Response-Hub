@@ -68,6 +68,38 @@ function renderPublishedAlerts() {
         description.textContent =
             crisisAlert.description;
 
+        
+        const editButton = document.createElement("button");
+        editButton.type = "button";
+        editButton.textContent = "Edit Alert";
+
+        editButton.addEventListener("click", function () {
+            const newTitle = prompt("Edit alert title:", crisisAlert.title);
+            if (newTitle === null) return;
+
+            const newDescription = prompt(
+                "Edit alert description:",
+                crisisAlert.description
+            );
+            if (newDescription === null) return;
+
+            if (!newTitle.trim() || !newDescription.trim()) {
+                alert("Title and description cannot be empty.");
+                return;
+            }
+
+            const alerts = getAlerts();
+
+            if (!alerts[index]) return;
+
+            alerts[index].title = newTitle.trim();
+            alerts[index].description = newDescription.trim();
+            alerts[index].updatedAt = new Date().toISOString();
+
+            saveAlerts(alerts);
+            renderPublishedAlerts();
+            });
+
 
         const deleteButton = document.createElement("button");
         deleteButton.textContent = "Delete Alert";
@@ -89,6 +121,7 @@ function renderPublishedAlerts() {
         card.appendChild(location);
         card.appendChild(type);
         card.appendChild(description);
+        card.appendChild(editButton);
         card.appendChild(deleteButton);
 
         publishedAlertsContainer.appendChild(card);
