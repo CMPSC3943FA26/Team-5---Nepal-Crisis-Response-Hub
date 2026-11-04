@@ -174,6 +174,23 @@ statusLabel.appendChild(statusSelect);
 card.appendChild(statusLabel);
 
 
+if (
+    request.coordinates &&
+    typeof request.coordinates.latitude === "number" &&
+    typeof request.coordinates.longitude === "number"
+) {
+    const sharedLocation = document.createElement("p");
+
+    sharedLocation.textContent =
+        "Shared GPS Location: " +
+        request.coordinates.latitude.toFixed(6) +
+        ", " +
+        request.coordinates.longitude.toFixed(6);
+
+    card.appendChild(sharedLocation);
+}
+
+
             assignedRequestList.appendChild(card);
         });
     }
