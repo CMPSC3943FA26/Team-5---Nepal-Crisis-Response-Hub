@@ -12,24 +12,28 @@ helpForm.addEventListener("submit", function (event) {
     const currentRequestUser =
     JSON.parse(localStorage.getItem("currentPrototypeUser"));
 
+
 const request = {
     assistance,
     location,
     urgency,
     description,
+    coordinates: sharedCoordinates
+        ? { ...sharedCoordinates }
+        : null,
     status: "Pending",
     userEmail: currentRequestUser
         ? currentRequestUser.email
         : null,
     createdAt: new Date().toISOString()
 };
+
     const existingRequests =
         JSON.parse(localStorage.getItem("helpRequests")) || [];
 
     existingRequests.push(request);
 
-    localStorage.setItem(
-        "helpRequests",
+    localStorage.setItem("helpRequests",
         JSON.stringify(existingRequests)
     );
 
@@ -37,6 +41,7 @@ const request = {
         "Prototype request saved successfully in this browser.";
 
     helpForm.reset();
+    sharedCoordinates = null;
 });
 const alertsContainer = document.getElementById("alertsContainer");
 
@@ -412,4 +417,74 @@ if (resourceSearch && resourceType && resourceResults) {
     resourceSearch.addEventListener("input", renderResources);
     resourceType.addEventListener("change", renderResources);
     renderResources();
+}
+
+const useCurrentLocationButton =
+    document.getElementById("useCurrentLocation");
+
+const locationMessage =
+    document.getElementById("locationMessage");
+
+let sharedCoordinates = null;
+
+
+const manualLocationInput =
+    document.getElementById("location");
+
+if (manualLocationInput) {
+    manualLocationInput.addEventListener("input", function () {
+        sharedCoordinates = null;
+
+        if (locationMessage) {
+            locationMessage.textContent =
+                "Manual location entered. GPS coordinates will not be shared.";
+        }
+    });
+}
+
+
+if (useCurrentLocationButton && locationMessage) {
+    useCurrentLocationButton.addEventListener("click", function () {
+        if (!navigator.geolocation) {
+            locationMessage.textContent =
+                "Your browser does not support location sharing.";
+            return;
+        }
+
+        locationMessage.textContent = "Requesting location permission...";
+
+        navigator.geolocation.getCurrentPosition(
+            function (position) {
+                const latitude = position.coords.latitude;
+                const longitude = position.coords.longitude;
+
+                sharedCoordinates = {
+                    latitude: latitude,
+                    longitude: longitude
+                };
+
+                const locationInput =
+                    document.getElementById("location");
+
+                if (locationInput) {
+                    locationInput.value =
+                        latitude.toFixed(6) + ", " +
+                        longitude.toFixed(6);
+                }
+
+                locationMessage.textContent =
+                    "Location added. It will be shared when you submit your request.";
+            },
+            function () {
+                sharedCoordinates = null;
+                locationMessage.textContent =
+                    "Location access unavailable or denied. You can enter your location manually.";
+            },
+            {
+                enableHighAccuracy: false,
+                timeout: 10000,
+                maximumAge: 0
+            }
+        );
+    });
 }
