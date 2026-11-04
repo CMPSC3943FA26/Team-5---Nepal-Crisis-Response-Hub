@@ -687,6 +687,70 @@ function renderMissingPersonResults() {
             "Reported Status: " + (person.status || "Missing");
 
         card.append(heading, location, status);
+        
+const loggedInUser = JSON.parse(
+    localStorage.getItem("currentPrototypeUser") || "null"
+);
+
+const savedReports = JSON.parse(
+    localStorage.getItem("missingPersons") || "[]"
+);
+
+const reportIndex = savedReports.findIndex(function (report) {
+    return (
+        report.createdAt === person.createdAt &&
+        report.name === person.name &&
+        report.lastKnownLocation === person.lastKnownLocation
+    );
+});
+
+if (
+    loggedInUser &&
+    loggedInUser.role === "admin" &&
+    reportIndex !== -1 &&
+    person.status === "Missing"
+) {
+    const safeButton = document.createElement("button");
+    safeButton.type = "button";
+    safeButton.textContent = "Mark as Safe";
+
+    safeButton.addEventListener("click", function () {
+        const confirmed = confirm(
+            "Mark this fictional person as located and safe?"
+        );
+
+        if (!confirmed) return;
+
+        const latestReports = JSON.parse(
+            localStorage.getItem("missingPersons") || "[]"
+        );
+
+        const latestReport = latestReports[reportIndex];
+
+        if (
+            !latestReport ||
+            latestReport.createdAt !== person.createdAt ||
+            latestReport.name !== person.name ||
+            latestReport.status !== "Missing"
+        ) {
+            alert("Report has changed. Please refresh.");
+            return;
+        }
+
+        latestReport.status = "Located - Safe";
+        latestReport.updatedAt = new Date().toISOString();
+
+        localStorage.setItem(
+            "missingPersons",
+            JSON.stringify(latestReports)
+        );
+
+        renderMissingPersonResults();
+    });
+
+    card.appendChild(safeButton);
+}
+
         missingPersonResults.appendChild(card);
     });
 }
