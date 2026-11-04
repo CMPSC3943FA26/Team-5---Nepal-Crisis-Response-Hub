@@ -274,32 +274,51 @@ if (authNavLink) {
 
  // Prototype emergency resources
 // Demonstration data only — not real-time facilities
+
 const emergencyResources = [
     {
         name: "Demo Hospital - Kathmandu",
         type: "hospital",
         location: "Kathmandu",
-        description: "Sample hospital resource for testing."
+        description: "Sample hospital resource for testing.",
+        availability: "Available"
     },
     {
         name: "Demo Emergency Shelter - Pokhara",
         type: "shelter",
         location: "Pokhara",
-        description: "Sample emergency shelter for testing."
+        description: "Sample emergency shelter for testing.",
+        availability: "Available"
     },
     {
         name: "Demo Relief Center - Chitwan",
         type: "relief",
         location: "Chitwan",
-        description: "Sample relief center for testing."
+        description: "Sample relief center for testing.",
+        availability: "Available"
     },
     {
         name: "Demo Hospital - Lalitpur",
         type: "hospital",
         location: "Lalitpur",
-        description: "Sample hospital resource for testing."
+        description: "Sample hospital resource for testing.",
+        availability: "Available"
     }
 ];
+
+
+const savedResourceAvailability = JSON.parse(
+    localStorage.getItem("resourceAvailability") || "{}"
+);
+
+emergencyResources.forEach(function (resource) {
+    const savedStatus = savedResourceAvailability[resource.name];
+
+    if (savedStatus === "Available" || savedStatus === "Unavailable") {
+        resource.availability = savedStatus;
+    }
+});
+
 
 const resourceSearch = document.getElementById("resourceSearch");
 const resourceType = document.getElementById("resourceType");
@@ -359,10 +378,32 @@ function renderResources() {
         const description = document.createElement("p");
         description.textContent = resource.description;
 
+        
+const availability = document.createElement("p");
+
+const availabilityStatus =
+    resource.availability || "Unknown";
+
+availability.textContent =
+    "Availability: " + availabilityStatus;
+
+availability.style.fontWeight = "bold";
+
+if (availabilityStatus === "Available") {
+    availability.style.color = "green";
+} else if (availabilityStatus === "Unavailable") {
+    availability.style.color = "red";
+} else {
+    availability.style.color = "gray";
+}
+
+
         const demoLabel = document.createElement("p");
         demoLabel.textContent = "DEMO ONLY — Not a verified facility.";
 
-        card.append(title, location, type, description, demoLabel);
+        
+card.append(title, location, type, description, availability, demoLabel);
+
         resourceResults.appendChild(card);
     });
 }

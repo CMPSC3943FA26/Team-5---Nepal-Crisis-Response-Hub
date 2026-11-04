@@ -320,3 +320,55 @@ card.appendChild(notesSection);
 if (currentAdminUser && currentAdminUser.role === "admin") {
     renderAdminRequests();
 }
+
+
+const adminResourceList =
+    document.getElementById("adminResourceList");
+
+if (adminResourceList) {
+    const demoResources = [
+        "Demo Hospital - Kathmandu",
+        "Demo Emergency Shelter - Pokhara",
+        "Demo Relief Center - Chitwan",
+        "Demo Hospital - Lalitpur"
+    ];
+
+    const savedAvailability = JSON.parse(
+        localStorage.getItem("resourceAvailability") || "{}"
+    );
+
+    demoResources.forEach(function (resourceName) {
+        const card = document.createElement("div");
+        card.className = "card";
+
+        const heading = document.createElement("h3");
+        heading.textContent = resourceName;
+
+        const label = document.createElement("label");
+        label.textContent = "Availability: ";
+
+        const select = document.createElement("select");
+
+        ["Available", "Unavailable"].forEach(function (status) {
+            const option = document.createElement("option");
+            option.value = status;
+            option.textContent = status;
+            select.appendChild(option);
+        });
+
+        select.value = savedAvailability[resourceName] || "Available";
+
+        select.addEventListener("change", function () {
+            savedAvailability[resourceName] = select.value;
+
+            localStorage.setItem(
+                "resourceAvailability",
+                JSON.stringify(savedAvailability)
+            );
+        });
+
+        label.appendChild(select);
+        card.append(heading, label);
+        adminResourceList.appendChild(card);
+    });
+}
