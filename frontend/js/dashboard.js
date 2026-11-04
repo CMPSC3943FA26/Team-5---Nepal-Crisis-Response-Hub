@@ -108,6 +108,72 @@ if (currentUser.role === "responder" && assignedRequestList) {
             });
 
             card.prepend(heading);
+
+            
+const statusLabel = document.createElement("label");
+statusLabel.textContent = "Update Response Status: ";
+
+const statusSelect = document.createElement("select");
+
+["Pending", "In Progress", "Completed"].forEach(function (status) {
+    const option = document.createElement("option");
+    option.value = status;
+    option.textContent = status;
+    statusSelect.appendChild(option);
+});
+
+statusSelect.value = request.status || "Pending";
+
+// Finished or canceled requests cannot be updated
+if (
+    request.status === "Completed" ||
+    request.status === "Canceled"
+) {
+    statusSelect.disabled = true;
+
+    if (request.status === "Canceled") {
+        const option = document.createElement("option");
+        option.value = "Canceled";
+        option.textContent = "Canceled";
+        statusSelect.appendChild(option);
+        statusSelect.value = "Canceled";
+    }
+}
+
+statusSelect.addEventListener("change", function () {
+    const savedRequests =
+        JSON.parse(localStorage.getItem("helpRequests") || "[]");
+
+    const originalIndex = allRequests.indexOf(request);
+    const savedRequest = savedRequests[originalIndex];
+
+    if (
+        !savedRequest ||
+        savedRequest.assignedResponderEmail !== currentUser.email ||
+        !["Pending", "In Progress"].includes(
+            savedRequest.status || "Pending"
+        )
+    ) {
+        alert("Request cannot be updated. Please refresh.");
+        window.location.reload();
+        return;
+    }
+
+    savedRequest.status = statusSelect.value;
+    savedRequest.updatedAt = new Date().toISOString();
+
+    localStorage.setItem(
+        "helpRequests",
+        JSON.stringify(savedRequests)
+    );
+
+    window.location.reload();
+});
+
+statusLabel.appendChild(statusSelect);
+card.appendChild(statusLabel);
+
+
             assignedRequestList.appendChild(card);
         });
     }
