@@ -85,15 +85,64 @@ publishedDate.textContent =
         ? new Date(crisisAlert.createdAt).toLocaleString()
         : "Not available");
 
-        alertCard.appendChild(badge);
-        alertCard.appendChild(title);
-        alertCard.appendChild(location);
-        alertCard.appendChild(type);
-        alertCard.appendChild(severity);
-        alertCard.appendChild(description);
-        alertCard.appendChild(safetyInstructions);
-        alertCard.appendChild(publishedDate);
-        alertsContainer.appendChild(alertCard);
+        
+const detailsButton = document.createElement("button");
+detailsButton.type = "button";
+detailsButton.textContent = "View Details";
+
+const detailsContainer = document.createElement("div");
+detailsContainer.hidden = true;
+
+function addDetail(label, value) {
+    const paragraph = document.createElement("p");
+    const strong = document.createElement("strong");
+
+    strong.textContent = label + ": ";
+    paragraph.appendChild(strong);
+    paragraph.appendChild(
+        document.createTextNode(value || "Not provided")
+    );
+
+    detailsContainer.appendChild(paragraph);
+}
+
+addDetail("Verification", "Prototype verified alert");
+addDetail("Type", crisisAlert.type);
+addDetail("Location", crisisAlert.location);
+addDetail("Severity", crisisAlert.severity);
+addDetail("Published",
+    crisisAlert.createdAt
+        ? new Date(crisisAlert.createdAt).toLocaleString()
+        : "Not available"
+);
+addDetail("Description", crisisAlert.description);
+addDetail("Safety Instructions", crisisAlert.safetyInstructions);
+
+detailsButton.setAttribute("aria-expanded", "false");
+
+detailsButton.addEventListener("click", function () {
+    const isOpening = detailsContainer.hidden;
+
+    detailsContainer.hidden = !isOpening;
+    detailsButton.textContent =
+        isOpening ? "Hide Details" : "View Details";
+    detailsButton.setAttribute(
+        "aria-expanded",
+        String(isOpening)
+    );
+});
+
+
+      
+    alertCard.appendChild(badge);
+    alertCard.appendChild(title);
+    alertCard.appendChild(location);
+    alertCard.appendChild(severity);
+    alertCard.appendChild(detailsButton);
+    alertCard.appendChild(detailsContainer);
+
+    alertsContainer.appendChild(alertCard);
+
 
     });
 }
