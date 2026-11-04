@@ -72,6 +72,24 @@
             </select>
         </div>
 
+        
+        <div class="alert-location-filter">
+            <label for="alertLocationFilter">
+                Filter by Location
+            </label>
+
+            <input
+                type="search"
+                id="alertLocationFilter"
+                placeholder="Example: Kathmandu or Pokhara"
+            >
+
+            <button type="button" id="clearAlertLocation">
+                Clear Location
+            </button>
+        </div>
+
+
 
         <div class="cards" id="alertsContainer">
 
@@ -98,6 +116,10 @@
             </article>
 
         </div>
+
+        <p id="noMatchingAlerts" hidden>
+    No crisis alerts match your selected filters.
+</p>
 
     </div>
 </section>
