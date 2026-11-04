@@ -203,6 +203,15 @@ function renderAdminRequests() {
     const requests =
         JSON.parse(localStorage.getItem("helpRequests")) || [];
 
+        
+const registeredUsers =
+    JSON.parse(localStorage.getItem("prototypeUsers")) || [];
+
+const availableResponders = registeredUsers.filter(function (user) {
+    return user.role === "responder" && user.email;
+});
+
+
     if (requests.length === 0) {
         const message = document.createElement("p");
         message.textContent = "No emergency requests found.";
@@ -223,7 +232,13 @@ function renderAdminRequests() {
             ["Location", request.location],
             ["Urgency", request.urgency],
             ["Description", request.description],
-            ["Status", request.status || "Pending"]
+            
+            ["Status", request.status || "Pending"],
+            ["Assigned Responder",
+    availableResponders.find(function (responder) {
+        return responder.email === request.assignedResponderEmail;
+    })?.name || request.assignedResponderEmail || "Not assigned"]
+
         ];
 
         details.forEach(function (detail) {
@@ -283,6 +298,65 @@ statusSelect.addEventListener("change", function () {
 
 statusLabel.appendChild(statusSelect);
 card.appendChild(statusLabel);
+
+
+const assignmentLabel = document.createElement("label");
+assignmentLabel.textContent = "Assign Responder: ";
+
+const responderSelect = document.createElement("select");
+
+const unassignedOption = document.createElement("option");
+unassignedOption.value = "";
+unassignedOption.textContent = "Select a responder";
+responderSelect.appendChild(unassignedOption);
+
+availableResponders.forEach(function (responder) {
+    const option = document.createElement("option");
+    option.value = responder.email;
+    option.textContent = responder.name || responder.email;
+    responderSelect.appendChild(option);
+});
+
+// Restore previously saved assignment
+responderSelect.value = request.assignedResponderEmail || "";
+
+// Completed and canceled requests cannot be reassigned
+if (
+    request.status === "Completed" ||
+    request.status === "Canceled"
+) {
+    responderSelect.disabled = true;
+}
+
+responderSelect.addEventListener("change", function () {
+    const allRequests =
+        JSON.parse(localStorage.getItem("helpRequests")) || [];
+
+    if (!allRequests[index]) return;
+
+    if (
+        allRequests[index].status === "Completed" ||
+        allRequests[index].status === "Canceled"
+    ) {
+        return;
+    }
+
+    allRequests[index].assignedResponderEmail =
+        responderSelect.value;
+
+    allRequests[index].updatedAt = new Date().toISOString();
+
+    localStorage.setItem(
+        "helpRequests",
+        JSON.stringify(allRequests)
+    );
+
+    renderAdminRequests();
+});
+
+assignmentLabel.appendChild(responderSelect);
+card.appendChild(assignmentLabel);
+
 
 
 const notesSection = document.createElement("div");

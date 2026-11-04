@@ -71,6 +71,23 @@ allRequests.forEach(function (request, index) {
         return;
     }
 
+    
+const isAssignedToMe =
+    request.assignedResponderEmail === currentUser.email;
+
+const assignmentStatus = document.createElement("p");
+
+if (isAssignedToMe) {
+    assignmentStatus.textContent = "Assignment: Assigned to you";
+    assignmentStatus.style.color = "green";
+} else if (request.assignedResponderEmail) {
+    assignmentStatus.textContent =
+        "Assignment: Assigned to another responder";
+} else {
+    assignmentStatus.textContent = "Assignment: Unassigned";
+}
+
+
             const card = document.createElement("article");
             card.className = "card";
 
@@ -97,6 +114,8 @@ allRequests.forEach(function (request, index) {
 
                 card.appendChild(paragraph);
             });
+
+card.appendChild(assignmentStatus);
 
             responderRequestList.appendChild(card);
         });
