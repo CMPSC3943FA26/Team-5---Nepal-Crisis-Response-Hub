@@ -610,3 +610,92 @@ if (useCurrentLocationButton && locationMessage) {
         );
     });
 }
+
+const demoMissingPersons = [
+    {
+        name: "Demo Person A",
+        lastKnownLocation: "Kathmandu",
+        status: "Missing"
+    },
+    {
+        name: "Demo Person B",
+        lastKnownLocation: "Pokhara",
+        status: "Located - Safe"
+    },
+    {
+        name: "Demo Person C",
+        lastKnownLocation: "Chitwan",
+        status: "Missing"
+    }
+];
+
+const missingPersonSearch =
+    document.getElementById("missingPersonSearch");
+
+const missingPersonResults =
+    document.getElementById("missingPersonResults");
+
+function renderMissingPersonResults() {
+    if (!missingPersonSearch || !missingPersonResults) {
+        return;
+    }
+
+    const searchText =
+        missingPersonSearch.value.trim().toLowerCase();
+
+    missingPersonResults.replaceChildren();
+
+    if (!searchText) {
+        const message = document.createElement("p");
+        message.textContent =
+            "Enter a name to search demonstration reports.";
+        missingPersonResults.appendChild(message);
+        return;
+    }
+
+    const reports = [
+        ...demoMissingPersons,
+        ...JSON.parse(localStorage.getItem("missingPersons") || "[]")
+    ];
+
+    const matches = reports.filter(function (person) {
+        return typeof person.name === "string" &&
+            person.name.toLowerCase().includes(searchText);
+    });
+
+    if (matches.length === 0) {
+        const message = document.createElement("p");
+        message.textContent = "No matching reports found.";
+        missingPersonResults.appendChild(message);
+        return;
+    }
+
+    matches.forEach(function (person) {
+        const card = document.createElement("article");
+        card.className = "card";
+
+        const heading = document.createElement("h3");
+        heading.textContent = person.name;
+
+        const location = document.createElement("p");
+        location.textContent =
+            "Last Known Location: " +
+            (person.lastKnownLocation || "Not provided");
+
+        const status = document.createElement("p");
+        status.textContent =
+            "Reported Status: " + (person.status || "Missing");
+
+        card.append(heading, location, status);
+        missingPersonResults.appendChild(card);
+    });
+}
+
+if (missingPersonSearch && missingPersonResults) {
+    missingPersonSearch.addEventListener(
+        "input",
+        renderMissingPersonResults
+    );
+
+    renderMissingPersonResults();
+}
