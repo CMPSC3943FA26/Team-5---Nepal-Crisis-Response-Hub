@@ -47,6 +47,9 @@ if (alertsContainer) {
     publishedAlerts.forEach(function (crisisAlert) {
         const alertCard = document.createElement("article");
         alertCard.classList.add("card");
+        
+        alertCard.dataset.alertType = crisisAlert.type || "Other";
+
 
         const badge = document.createElement("span");
         badge.classList.add("badge");
@@ -156,6 +159,40 @@ detailsButton.addEventListener("click", function () {
 
     });
 }
+
+
+            const alertTypeFilter = document.getElementById("alertTypeFilter");
+
+            if (alertTypeFilter && alertsContainer) {
+                // Assign types to the two existing homepage demo alerts.
+                const demoCards = alertsContainer.querySelectorAll(
+                    "article.card:not([data-alert-type])"
+                );
+
+                if (demoCards[0]) {
+                    demoCards[0].dataset.alertType = "Flood";
+                }
+
+                if (demoCards[1]) {
+                    demoCards[1].dataset.alertType = "Other";
+                }
+
+                function filterCrisisAlerts() {
+                    const selectedType = alertTypeFilter.value;
+                    const cards = alertsContainer.querySelectorAll("article.card");
+
+                    cards.forEach(function (card) {
+                        const matches =
+                            selectedType === "all" ||
+                            card.dataset.alertType === selectedType;
+
+                        card.style.display = matches ? "" : "none";
+                    });
+                }
+
+                alertTypeFilter.addEventListener("change", filterCrisisAlerts);
+                filterCrisisAlerts();
+            }
 
 
  // Update homepage navigation based on login status
