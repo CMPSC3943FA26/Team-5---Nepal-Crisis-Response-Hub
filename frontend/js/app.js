@@ -115,6 +115,16 @@ addDetail("Published",
         ? new Date(crisisAlert.createdAt).toLocaleString()
         : "Not available"
 );
+
+
+if (crisisAlert.updatedAt) {
+    addDetail(
+        "Last Updated",
+        new Date(crisisAlert.updatedAt).toLocaleString()
+    );
+}
+
+
 addDetail("Description", crisisAlert.description);
 addDetail("Safety Instructions", crisisAlert.safetyInstructions);
 
