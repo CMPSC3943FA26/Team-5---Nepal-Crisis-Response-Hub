@@ -699,3 +699,56 @@ if (missingPersonSearch && missingPersonResults) {
 
     renderMissingPersonResults();
 }
+
+const missingPersonForm =
+    document.getElementById("missingPersonForm");
+
+if (missingPersonForm) {
+    missingPersonForm.addEventListener("submit", function (event) {
+        event.preventDefault();
+
+        const name =
+            document.getElementById("missingPersonName").value.trim();
+
+        const lastKnownLocation =
+            document.getElementById("missingPersonLocation").value.trim();
+
+        const description =
+            document.getElementById("missingPersonDescription").value.trim();
+
+        const message =
+            document.getElementById("missingPersonMessage");
+
+        if (!name || !lastKnownLocation || !description) {
+            message.textContent = "Please complete all fields.";
+            return;
+        }
+
+        const reports = JSON.parse(
+            localStorage.getItem("missingPersons") || "[]"
+        );
+
+        reports.push({
+            name: name,
+            lastKnownLocation: lastKnownLocation,
+            description: description,
+            status: "Missing",
+            createdAt: new Date().toISOString()
+        });
+
+        localStorage.setItem(
+            "missingPersons",
+            JSON.stringify(reports)
+        );
+
+        message.textContent =
+            "Fictional missing-person report saved successfully.";
+
+        missingPersonForm.reset();
+
+        // Refresh any existing search results
+        if (typeof renderMissingPersonResults === "function") {
+            renderMissingPersonResults();
+        }
+    });
+}
