@@ -284,6 +284,35 @@ statusSelect.addEventListener("change", function () {
 statusLabel.appendChild(statusSelect);
 card.appendChild(statusLabel);
 
+
+const notesSection = document.createElement("div");
+
+const notesHeading = document.createElement("h4");
+notesHeading.textContent = "Additional Notes";
+notesSection.appendChild(notesHeading);
+
+if (Array.isArray(request.notes) && request.notes.length > 0) {
+    request.notes.forEach(function (note) {
+        const noteParagraph = document.createElement("p");
+
+        const noteDate = note.createdAt
+            ? new Date(note.createdAt).toLocaleString()
+            : "Date unavailable";
+
+        noteParagraph.textContent =
+            note.text + " — " + noteDate;
+
+        notesSection.appendChild(noteParagraph);
+    });
+} else {
+    const noNotes = document.createElement("p");
+    noNotes.textContent = "No additional notes yet.";
+    notesSection.appendChild(noNotes);
+}
+
+card.appendChild(notesSection);
+
+
         adminRequestList.appendChild(card);
     });
 }

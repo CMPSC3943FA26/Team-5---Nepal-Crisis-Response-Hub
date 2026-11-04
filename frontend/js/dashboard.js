@@ -226,6 +226,100 @@ cancelButton.addEventListener("click", function () {
 card.appendChild(cancelButton);
 
 
+const notesButton = document.createElement("button");
+notesButton.type = "button";
+notesButton.textContent = "Add Note";
+
+const notesStatus = request.status || "Pending";
+
+if (notesStatus === "Completed" || notesStatus === "Canceled") {
+    notesButton.disabled = true;
+}
+
+notesButton.addEventListener("click", function () {
+    const newNote = prompt(
+        "Enter additional information about your request:"
+    );
+
+    if (newNote === null) return;
+
+    const noteText = newNote.trim();
+
+    if (!noteText) {
+        alert("Note cannot be empty.");
+        return;
+    }
+
+    const savedRequests =
+        JSON.parse(localStorage.getItem("helpRequests") || "[]");
+
+    const originalIndex = userRequestIndexes[index];
+    const savedRequest = savedRequests[originalIndex];
+
+    if (
+        !Number.isInteger(originalIndex) ||
+        !savedRequest ||
+        savedRequest.userEmail !== currentUser.email ||
+        savedRequest.assistance !== request.assistance ||
+        savedRequest.location !== request.location ||
+        savedRequest.description !== request.description ||
+        !["Pending", "In Progress"].includes(
+            savedRequest.status || "Pending"
+        )
+    ) {
+        alert("Request has changed. Please refresh the page.");
+        return;
+    }
+
+    if (!Array.isArray(savedRequest.notes)) {
+        savedRequest.notes = [];
+    }
+
+    savedRequest.notes.push({
+        text: noteText,
+        createdAt: new Date().toISOString()
+    });
+
+    localStorage.setItem(
+        "helpRequests",
+        JSON.stringify(savedRequests)
+    );
+
+    window.location.reload();
+});
+
+card.appendChild(notesButton);
+
+
+
+const notesSection = document.createElement("div");
+
+const notesHeading = document.createElement("h4");
+notesHeading.textContent = "Additional Notes";
+
+notesSection.appendChild(notesHeading);
+
+if (Array.isArray(request.notes) && request.notes.length > 0) {
+    request.notes.forEach(function (note) {
+        const noteParagraph = document.createElement("p");
+
+        const noteDate = note.createdAt
+            ? new Date(note.createdAt).toLocaleString()
+            : "Date unavailable";
+
+        noteParagraph.textContent =
+            note.text + " — " + noteDate;
+
+        notesSection.appendChild(noteParagraph);
+    });
+} else {
+    const noNotes = document.createElement("p");
+    noNotes.textContent = "No additional notes yet.";
+    notesSection.appendChild(noNotes);
+}
+
+card.appendChild(notesSection);
+
 
             requestList.appendChild(card);
         });
