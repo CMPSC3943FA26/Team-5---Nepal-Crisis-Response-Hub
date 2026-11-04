@@ -50,6 +50,10 @@ if (alertsContainer) {
         
         alertCard.dataset.alertType = crisisAlert.type || "Other";
 
+        
+        alertCard.dataset.alertLocation = crisisAlert.location || "";
+
+
 
         const badge = document.createElement("span");
         badge.classList.add("badge");
@@ -177,21 +181,76 @@ detailsButton.addEventListener("click", function () {
                     demoCards[1].dataset.alertType = "Other";
                 }
 
-                function filterCrisisAlerts() {
-                    const selectedType = alertTypeFilter.value;
-                    const cards = alertsContainer.querySelectorAll("article.card");
+                
+            const alertLocationFilter =
+                document.getElementById("alertLocationFilter");
 
-                    cards.forEach(function (card) {
-                        const matches =
-                            selectedType === "all" ||
-                            card.dataset.alertType === selectedType;
+            const clearAlertLocation =
+                document.getElementById("clearAlertLocation");
 
-                        card.style.display = matches ? "" : "none";
-                    });
+            function filterCrisisAlerts() {
+                const selectedType = alertTypeFilter.value;
+
+                const searchLocation = alertLocationFilter
+                    ? alertLocationFilter.value.trim().toLowerCase()
+                    : "";
+
+                const cards =
+                    alertsContainer.querySelectorAll("article.card");
+
+                let visibleCount = 0;
+
+                cards.forEach(function (card) {
+                    const matchesType =
+                        selectedType === "all" ||
+                        card.dataset.alertType === selectedType;
+
+                    const matchesLocation =
+                        !searchLocation ||
+                        (card.dataset.alertLocation || "")
+                            .toLowerCase()
+                            .includes(searchLocation);
+
+                    
+                const isVisible = matchesType && matchesLocation;
+
+                        card.style.display = isVisible ? "" : "none";
+
+                if (isVisible) {
+                   visibleCount++;
                 }
 
-                alertTypeFilter.addEventListener("change", filterCrisisAlerts);
-                filterCrisisAlerts();
+                });
+
+                
+                const noMatchingAlerts =
+                    document.getElementById("noMatchingAlerts");
+
+                if (noMatchingAlerts) {
+                    noMatchingAlerts.hidden = visibleCount > 0;
+                }
+
+
+            }
+
+            alertTypeFilter.addEventListener("change", filterCrisisAlerts);
+
+            if (alertLocationFilter) {
+                alertLocationFilter.addEventListener(
+                    "input",
+                    filterCrisisAlerts
+                );
+            }
+
+            if (clearAlertLocation && alertLocationFilter) {
+                clearAlertLocation.addEventListener("click", function () {
+                    alertLocationFilter.value = "";
+                    filterCrisisAlerts();
+                });
+            }
+
+            filterCrisisAlerts();
+
             }
 
 
