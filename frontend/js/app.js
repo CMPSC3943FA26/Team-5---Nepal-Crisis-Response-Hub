@@ -43,6 +43,121 @@ const request = {
     helpForm.reset();
     sharedCoordinates = null;
 });
+
+
+const emergencyNotifications =
+    document.getElementById("emergencyNotifications");
+
+const notificationList =
+    document.getElementById("notificationList");
+
+if (emergencyNotifications && notificationList) {
+    const alerts =
+        JSON.parse(localStorage.getItem("crisisAlerts") || "[]");
+
+    const seenAlerts =
+        JSON.parse(localStorage.getItem("seenEmergencyAlerts") || "[]");
+
+    notificationList.replaceChildren();
+
+    alerts.forEach(function (crisisAlert) {
+        const alertId =
+            crisisAlert.createdAt + "|" + crisisAlert.title;
+
+        if (seenAlerts.includes(alertId)) {
+            return;
+        }
+
+        const notification = document.createElement("div");
+        notification.className = "card";
+
+        const title = document.createElement("h4");
+        title.textContent = crisisAlert.title || "Emergency Alert";
+
+        const location = document.createElement("p");
+        location.textContent =
+            "Location: " + (crisisAlert.location || "Not specified");
+
+        const severity = document.createElement("p");
+        severity.textContent =
+            "Severity: " + (crisisAlert.severity || "Not specified");
+
+        const openButton = document.createElement("button");
+        openButton.type = "button";
+        openButton.textContent = "View Alert";
+
+        openButton.addEventListener("click", function () {
+            const currentSeen =
+                JSON.parse(
+                    localStorage.getItem("seenEmergencyAlerts") || "[]"
+                );
+
+            if (!currentSeen.includes(alertId)) {
+                currentSeen.push(alertId);
+
+                localStorage.setItem(
+                    "seenEmergencyAlerts",
+                    JSON.stringify(currentSeen)
+                );
+            }
+
+            
+const matchingAlert = Array.from(
+    document.querySelectorAll("[data-notification-id]")
+).find(function (card) {
+    return card.dataset.notificationId === alertId;
+});
+
+if (matchingAlert) {
+    // Clear filters so the related alert is visible
+    const typeFilter =
+        document.getElementById("alertTypeFilter");
+
+    const locationFilter =
+        document.getElementById("alertLocationFilter");
+
+    if (typeFilter) {
+        typeFilter.value = "all";
+        typeFilter.dispatchEvent(new Event("change"));
+    }
+
+    if (locationFilter) {
+        locationFilter.value = "";
+        locationFilter.dispatchEvent(new Event("input"));
+    }
+
+    
+matchingAlert.setAttribute("tabindex", "-1");
+
+matchingAlert.focus({ preventScroll: true });
+
+matchingAlert.style.outline = "3px solid #2563eb";
+
+matchingAlert.scrollIntoView({
+    behavior: "instant",
+    block: "center"
+});
+
+} else {
+    window.location.hash = "alerts";
+}
+
+            notification.remove();
+
+            if (!notificationList.children.length) {
+                emergencyNotifications.hidden = true;
+            }
+        });
+
+        notification.append(title, location, severity, openButton);
+        notificationList.appendChild(notification);
+    });
+
+    emergencyNotifications.hidden =
+        notificationList.children.length === 0;
+}
+
+
 const alertsContainer = document.getElementById("alertsContainer");
 
 if (alertsContainer) {
@@ -52,6 +167,13 @@ if (alertsContainer) {
     publishedAlerts.forEach(function (crisisAlert) {
         const alertCard = document.createElement("article");
         alertCard.classList.add("card");
+
+        
+const alertId =
+    crisisAlert.createdAt + "|" + crisisAlert.title;
+
+alertCard.dataset.notificationId = alertId;
+
         
         alertCard.dataset.alertType = crisisAlert.type || "Other";
 
