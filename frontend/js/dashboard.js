@@ -30,6 +30,16 @@ if (responderRequestsSection) {
 }
 
 
+const assignedRequestsSection =
+    document.getElementById("assignedRequestsSection");
+
+if (assignedRequestsSection) {
+    assignedRequestsSection.hidden =
+        currentUser.role !== "responder";
+}
+
+
+
     // Hide admin features from normal users
     const adminOnlyElements =
         document.querySelectorAll(".admin-only");
@@ -52,6 +62,123 @@ const requestHistoryList =
 
     const allRequests =
     JSON.parse(localStorage.getItem("helpRequests")) || [];
+
+    
+const assignedRequestList =
+    document.getElementById("assignedRequestList");
+
+if (currentUser.role === "responder" && assignedRequestList) {
+    assignedRequestList.replaceChildren();
+
+    const myAssignedRequests = allRequests.filter(function (request) {
+        return request.assignedResponderEmail === currentUser.email;
+    });
+
+    if (myAssignedRequests.length === 0) {
+        const message = document.createElement("p");
+        message.textContent = "No requests assigned to you yet.";
+        assignedRequestList.appendChild(message);
+    } else {
+        myAssignedRequests.forEach(function (request) {
+            const card = document.createElement("article");
+            card.className = "card";
+
+            const heading = document.createElement("h3");
+            heading.textContent =
+                request.assistance || "Emergency Help Request";
+
+            const details = [
+                ["Location", request.location],
+                ["Urgency", request.urgency],
+                ["Description", request.description],
+                ["Status", request.status || "Pending"]
+            ];
+
+            details.forEach(function (detail) {
+                const paragraph = document.createElement("p");
+                const label = document.createElement("strong");
+
+                label.textContent = detail[0] + ": ";
+                paragraph.appendChild(label);
+                paragraph.appendChild(
+                    document.createTextNode(detail[1] || "Not provided")
+                );
+
+                card.appendChild(paragraph);
+            });
+
+            card.prepend(heading);
+
+            
+const statusLabel = document.createElement("label");
+statusLabel.textContent = "Update Response Status: ";
+
+const statusSelect = document.createElement("select");
+
+["Pending", "In Progress", "Completed"].forEach(function (status) {
+    const option = document.createElement("option");
+    option.value = status;
+    option.textContent = status;
+    statusSelect.appendChild(option);
+});
+
+statusSelect.value = request.status || "Pending";
+
+// Finished or canceled requests cannot be updated
+if (
+    request.status === "Completed" ||
+    request.status === "Canceled"
+) {
+    statusSelect.disabled = true;
+
+    if (request.status === "Canceled") {
+        const option = document.createElement("option");
+        option.value = "Canceled";
+        option.textContent = "Canceled";
+        statusSelect.appendChild(option);
+        statusSelect.value = "Canceled";
+    }
+}
+
+statusSelect.addEventListener("change", function () {
+    const savedRequests =
+        JSON.parse(localStorage.getItem("helpRequests") || "[]");
+
+    const originalIndex = allRequests.indexOf(request);
+    const savedRequest = savedRequests[originalIndex];
+
+    if (
+        !savedRequest ||
+        savedRequest.assignedResponderEmail !== currentUser.email ||
+        !["Pending", "In Progress"].includes(
+            savedRequest.status || "Pending"
+        )
+    ) {
+        alert("Request cannot be updated. Please refresh.");
+        window.location.reload();
+        return;
+    }
+
+    savedRequest.status = statusSelect.value;
+    savedRequest.updatedAt = new Date().toISOString();
+
+    localStorage.setItem(
+        "helpRequests",
+        JSON.stringify(savedRequests)
+    );
+
+    window.location.reload();
+});
+
+statusLabel.appendChild(statusSelect);
+card.appendChild(statusLabel);
+
+
+            assignedRequestList.appendChild(card);
+        });
+    }
+}
+
 
     
 const responderRequestList =
