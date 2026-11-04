@@ -36,6 +36,11 @@ if (!currentUser) {
     const requestList =
         document.getElementById("requestList");
 
+        
+const requestHistoryList =
+    document.getElementById("requestHistoryList");
+
+
     const allRequests =
     JSON.parse(localStorage.getItem("helpRequests")) || [];
 
@@ -57,6 +62,12 @@ allRequests.forEach(function (request, originalIndex) {
     if (requestList && requests.length > 0) {
 
         requestList.innerHTML = "";
+
+        
+if (requestHistoryList) {
+    requestHistoryList.replaceChildren();
+}
+
 
         requests.forEach(function (request, index) {
 
@@ -321,7 +332,64 @@ if (Array.isArray(request.notes) && request.notes.length > 0) {
 card.appendChild(notesSection);
 
 
-            requestList.appendChild(card);
+
+const status = request.status || "Pending";
+
+
+if (
+    (status === "Completed" || status === "Canceled") &&
+    requestHistoryList
+) {
+    // Move the existing request details into an expandable panel
+    const detailsPanel = document.createElement("div");
+
+    
+    editButton.remove();
+    cancelButton.remove();
+    notesButton.remove();
+
+
+    while (card.firstChild) {
+        detailsPanel.appendChild(card.firstChild);
+    }
+
+    detailsPanel.hidden = true;
+
+    const historyHeading = document.createElement("h3");
+    historyHeading.textContent =
+        "Request #" + (index + 1) + " — " + request.assistance;
+
+    const historyStatus = document.createElement("p");
+    historyStatus.textContent = "Status: " + status;
+
+    const viewButton = document.createElement("button");
+    viewButton.type = "button";
+    viewButton.textContent = "View Details";
+    viewButton.setAttribute("aria-expanded", "false");
+
+    viewButton.addEventListener("click", function () {
+        const opening = detailsPanel.hidden;
+
+        detailsPanel.hidden = !opening;
+        viewButton.textContent =
+            opening ? "Hide Details" : "View Details";
+
+        viewButton.setAttribute(
+            "aria-expanded",
+            String(opening)
+        );
+    });
+
+    card.appendChild(historyHeading);
+    card.appendChild(historyStatus);
+    card.appendChild(viewButton);
+    card.appendChild(detailsPanel);
+
+    requestHistoryList.appendChild(card);
+} else {
+    requestList.appendChild(card);
+}
+
         });
     }
 
