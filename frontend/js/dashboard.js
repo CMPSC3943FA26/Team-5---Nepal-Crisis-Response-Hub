@@ -191,6 +191,40 @@ if (
 }
 
 
+const messagesSection = document.createElement("div");
+
+const messagesHeading = document.createElement("h4");
+messagesHeading.textContent = "Messages From Requester";
+messagesSection.appendChild(messagesHeading);
+
+const requesterMessages = Array.isArray(request.messages)
+    ? request.messages.filter(function (message) {
+        return (
+            message.senderEmail === request.userEmail &&
+            message.recipientEmail === currentUser.email
+        );
+    })
+    : [];
+
+if (requesterMessages.length === 0) {
+    const emptyMessage = document.createElement("p");
+    emptyMessage.textContent = "No messages from requester yet.";
+    messagesSection.appendChild(emptyMessage);
+} else {
+    requesterMessages.forEach(function (message) {
+        const paragraph = document.createElement("p");
+
+        const date = message.createdAt
+            ? new Date(message.createdAt).toLocaleString()
+            : "Date unavailable";
+
+        paragraph.textContent = message.text + " — " + date;
+        messagesSection.appendChild(paragraph);
+    });
+}
+
+card.appendChild(messagesSection);
+
             assignedRequestList.appendChild(card);
         });
     }
@@ -239,12 +273,31 @@ if (isAssignedToMe) {
             heading.textContent = "Request #" + (index + 1);
             card.appendChild(heading);
 
-            const details = [
-                ["Assistance", request.assistance],
-                ["Location", request.location],
-                ["Urgency", request.urgency],
-                ["Status", request.status || "Pending"]
-            ];
+            
+const registeredUsers =
+    JSON.parse(localStorage.getItem("prototypeUsers") || "[]");
+
+const assignedResponder = registeredUsers.find(function (user) {
+    return user.role === "responder" &&
+        user.email === request.assignedResponderEmail;
+});
+
+const assignedResponderName = assignedResponder
+    ? assignedResponder.name || "Registered Responder"
+    : request.assignedResponderEmail
+        ? "Assigned Responder"
+        : "Not assigned";
+
+
+        const details = [
+    ["Assistance", request.assistance],
+    ["Location", request.location],
+    ["Urgency", request.urgency],
+    ["Description", request.description],
+    ["Status", request.status || "Pending"],
+    ["Assigned Responder", assignedResponderName]
+];
+
 
             details.forEach(function (detail) {
                 const paragraph = document.createElement("p");
@@ -303,12 +356,29 @@ const heading = document.createElement("h3");
 heading.textContent = "Request #" + (index + 1);
 card.appendChild(heading);
 
+
+const registeredUsers =
+    JSON.parse(localStorage.getItem("prototypeUsers") || "[]");
+
+const assignedResponder = registeredUsers.find(function (user) {
+    return user.role === "responder" &&
+        user.email === request.assignedResponderEmail;
+});
+
+const assignedResponderName = assignedResponder
+    ? assignedResponder.name || "Registered Responder"
+    : request.assignedResponderEmail
+        ? "Assigned Responder"
+        : "Not assigned";
+
+
 const details = [
     ["Assistance", request.assistance],
     ["Location", request.location],
     ["Urgency", request.urgency],
     ["Description", request.description],
-    ["Status", request.status || "Pending"]
+    ["Status", request.status || "Pending"],
+    ["Assigned Responder", assignedResponderName]
 ];
 
 details.forEach(function (detail) {
@@ -402,6 +472,71 @@ if (
         window.location.reload();
     }
 });
+
+
+if (
+    request.assignedResponderEmail &&
+    !["Completed", "Canceled"].includes(request.status)
+) {
+    const contactButton = document.createElement("button");
+    contactButton.type = "button";
+    contactButton.textContent = "Contact Responder";
+
+    contactButton.addEventListener("click", function () {
+        const messageText = prompt(
+            "Enter a message for your assigned responder:"
+        );
+
+        if (messageText === null) return;
+
+        const trimmedMessage = messageText.trim();
+
+        if (!trimmedMessage) {
+            alert("Message cannot be empty.");
+            return;
+        }
+
+        const savedRequests = JSON.parse(
+            localStorage.getItem("helpRequests") || "[]"
+        );
+
+        const originalIndex = userRequestIndexes[index];
+        const savedRequest = savedRequests[originalIndex];
+
+        if (
+            !savedRequest ||
+            savedRequest.userEmail !== currentUser.email ||
+            savedRequest.assignedResponderEmail !==
+                request.assignedResponderEmail ||
+            ["Completed", "Canceled"].includes(savedRequest.status)
+        ) {
+            alert("Request or assignment has changed. Refresh the page.");
+            return;
+        }
+
+        if (!Array.isArray(savedRequest.messages)) {
+            savedRequest.messages = [];
+        }
+
+        savedRequest.messages.push({
+            senderEmail: currentUser.email,
+            recipientEmail: savedRequest.assignedResponderEmail,
+            text: trimmedMessage,
+            createdAt: new Date().toISOString()
+        });
+
+        localStorage.setItem(
+            "helpRequests",
+            JSON.stringify(savedRequests)
+        );
+
+        alert("Prototype message saved for your assigned responder.");
+        window.location.reload();
+    });
+
+    card.appendChild(contactButton);
+}
+
 
 card.appendChild(editButton);
 
