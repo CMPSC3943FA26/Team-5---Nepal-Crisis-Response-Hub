@@ -89,6 +89,36 @@
 
             <h2>Emergency Resources</h2>
 
+           
+<div class="resource-search">
+    <h3>Find Nearby Emergency Resources</h3>
+
+    <p>
+        Search prototype resources by district or location.
+        Results are not based on live GPS or availability.
+    </p>
+
+    <label for="resourceSearch">Enter Location</label>
+    <input
+        type="search"
+        id="resourceSearch"
+        placeholder="Example: Kathmandu or Pokhara"
+    >
+
+    <label for="resourceType">Resource Type</label>
+    <select id="resourceType">
+        <option value="all">All Resources</option>
+        <option value="hospital">Hospitals</option>
+        <option value="shelter">Shelters</option>
+        <option value="relief">Relief Centers</option>
+    </select>
+
+    <div id="resourceResults" class="cards">
+        <p>Enter a location or select a resource type to search.</p>
+    </div>
+</div>
+ 
+
             <div class="cards">
 
                

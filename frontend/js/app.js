@@ -116,3 +116,104 @@ if (authNavLink) {
     }
 }
 
+
+ // Prototype emergency resources
+// Demonstration data only — not real-time facilities
+const emergencyResources = [
+    {
+        name: "Demo Hospital - Kathmandu",
+        type: "hospital",
+        location: "Kathmandu",
+        description: "Sample hospital resource for testing."
+    },
+    {
+        name: "Demo Emergency Shelter - Pokhara",
+        type: "shelter",
+        location: "Pokhara",
+        description: "Sample emergency shelter for testing."
+    },
+    {
+        name: "Demo Relief Center - Chitwan",
+        type: "relief",
+        location: "Chitwan",
+        description: "Sample relief center for testing."
+    },
+    {
+        name: "Demo Hospital - Lalitpur",
+        type: "hospital",
+        location: "Lalitpur",
+        description: "Sample hospital resource for testing."
+    }
+];
+
+const resourceSearch = document.getElementById("resourceSearch");
+const resourceType = document.getElementById("resourceType");
+const resourceResults = document.getElementById("resourceResults");
+
+function renderResources() {
+    if (!resourceResults || !resourceSearch || !resourceType) {
+        return;
+    }
+
+    const searchText = resourceSearch.value.trim().toLowerCase();
+    const selectedType = resourceType.value;
+
+    resourceResults.replaceChildren();
+
+    if (!searchText && selectedType === "all") {
+        const message = document.createElement("p");
+        message.textContent =
+            "Enter a location or select a resource type to search.";
+        resourceResults.appendChild(message);
+        return;
+    }
+
+    const matches = emergencyResources.filter(function (resource) {
+        const matchesLocation =
+            !searchText ||
+            resource.location.toLowerCase().includes(searchText);
+
+        const matchesType =
+            selectedType === "all" ||
+            resource.type === selectedType;
+
+        return matchesLocation && matchesType;
+    });
+
+    if (matches.length === 0) {
+        const message = document.createElement("p");
+        message.textContent =
+            "No matching demonstration resources found.";
+        resourceResults.appendChild(message);
+        return;
+    }
+
+    matches.forEach(function (resource) {
+        const card = document.createElement("article");
+        card.className = "card";
+
+        const title = document.createElement("h3");
+        title.textContent = resource.name;
+
+        const location = document.createElement("p");
+        location.textContent = "Location: " + resource.location;
+
+        const type = document.createElement("p");
+        type.textContent = "Type: " + resource.type;
+
+        const description = document.createElement("p");
+        description.textContent = resource.description;
+
+        const demoLabel = document.createElement("p");
+        demoLabel.textContent = "DEMO ONLY — Not a verified facility.";
+
+        card.append(title, location, type, description, demoLabel);
+        resourceResults.appendChild(card);
+    });
+}
+
+if (resourceSearch && resourceType && resourceResults) {
+    resourceSearch.addEventListener("input", renderResources);
+    resourceType.addEventListener("change", renderResources);
+    renderResources();
+}
