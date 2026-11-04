@@ -621,3 +621,62 @@ if (
         );
     }
 }
+
+const incidentReportForm =
+    document.getElementById("incidentReportForm");
+
+if (incidentReportForm) {
+    incidentReportForm.addEventListener("submit", function (event) {
+        event.preventDefault();
+
+        const incidentType =
+            document.getElementById("incidentType").value;
+
+        const incidentLocation =
+            document.getElementById("incidentLocation").value.trim();
+
+        const incidentDescription =
+            document.getElementById("incidentDescription").value.trim();
+
+        const incidentReportMessage =
+            document.getElementById("incidentReportMessage");
+
+        if (!incidentType || !incidentLocation || !incidentDescription) {
+            incidentReportMessage.textContent =
+                "Please complete all fields.";
+            return;
+        }
+
+        const currentSession =
+            JSON.parse(localStorage.getItem("currentPrototypeUser"));
+
+        if (!currentSession || !currentSession.email) {
+            incidentReportMessage.textContent =
+                "Please log in to submit an incident report.";
+            return;
+        }
+
+        const reports =
+            JSON.parse(localStorage.getItem("incidentReports") || "[]");
+
+        reports.push({
+            type: incidentType,
+            location: incidentLocation,
+            description: incidentDescription,
+            reportedBy: currentSession.email,
+            status: "Reported",
+            createdAt: new Date().toISOString()
+        });
+
+        localStorage.setItem(
+            "incidentReports",
+            JSON.stringify(reports)
+        );
+
+        incidentReportMessage.textContent =
+            "Simulation incident report submitted successfully.";
+
+        incidentReportForm.reset();
+    });
+}
+
