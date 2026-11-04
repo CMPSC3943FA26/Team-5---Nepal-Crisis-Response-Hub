@@ -252,6 +252,19 @@ const statusSelect = document.createElement("select");
 
 statusSelect.value = request.status || "Pending";
 
+
+if (request.status === "Canceled") {
+    statusSelect.disabled = true;
+
+    const canceledOption = document.createElement("option");
+    canceledOption.value = "Canceled";
+    canceledOption.textContent = "Canceled";
+
+    statusSelect.appendChild(canceledOption);
+    statusSelect.value = "Canceled";
+}
+
+
 statusSelect.addEventListener("change", function () {
     const allRequests =
         JSON.parse(localStorage.getItem("helpRequests")) || [];

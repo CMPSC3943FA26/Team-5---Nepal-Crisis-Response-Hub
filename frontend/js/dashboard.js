@@ -172,6 +172,61 @@ if (
 card.appendChild(editButton);
 
 
+const cancelButton = document.createElement("button");
+cancelButton.type = "button";
+cancelButton.textContent = "Cancel Request";
+
+// Completed and canceled requests cannot be canceled
+const currentStatus = request.status || "Pending";
+
+if (currentStatus === "Completed" ||
+    currentStatus === "Canceled") {
+    cancelButton.disabled = true;
+}
+
+cancelButton.addEventListener("click", function () {
+    const confirmed = confirm(
+        "Are you sure you want to cancel this help request?"
+    );
+
+    if (!confirmed) return;
+
+    const savedRequests =
+        JSON.parse(localStorage.getItem("helpRequests")) || [];
+
+    const originalIndex = userRequestIndexes[index];
+    const savedRequest = savedRequests[originalIndex];
+
+    if (
+        !Number.isInteger(originalIndex) ||
+        !savedRequest ||
+        savedRequest.userEmail !== currentUser.email ||
+        savedRequest.createdAt !== request.createdAt ||
+        savedRequest.location !== request.location ||
+        savedRequest.description !== request.description ||
+        !["Pending", "In Progress"].includes(
+            savedRequest.status || "Pending"
+        )
+    ) {
+        alert("Request has changed. Please refresh the page.");
+        return;
+    }
+
+    savedRequest.status = "Canceled";
+    savedRequest.updatedAt = new Date().toISOString();
+
+    localStorage.setItem(
+        "helpRequests",
+        JSON.stringify(savedRequests)
+    );
+
+    window.location.reload();
+});
+
+card.appendChild(cancelButton);
+
+
+
             requestList.appendChild(card);
         });
     }
