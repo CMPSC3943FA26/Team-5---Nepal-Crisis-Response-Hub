@@ -14,12 +14,21 @@ if (!currentUser) {
     }
 
         // Show registration confirmation for volunteers
-    const volunteerCard =
-        document.getElementById("volunteerCard");
+    const volunteerCard = document.getElementById("volunteerCard");
 
     if (volunteerCard) {
         volunteerCard.hidden = currentUser.role !== "responder";
     }
+
+    
+const responderRequestsSection =
+    document.getElementById("responderRequestsSection");
+
+if (responderRequestsSection) {
+    responderRequestsSection.hidden =
+        currentUser.role !== "responder";
+}
+
 
     // Hide admin features from normal users
     const adminOnlyElements =
@@ -43,6 +52,57 @@ const requestHistoryList =
 
     const allRequests =
     JSON.parse(localStorage.getItem("helpRequests")) || [];
+
+    
+const responderRequestList =
+    document.getElementById("responderRequestList");
+
+if (currentUser.role === "responder" && responderRequestList) {
+    responderRequestList.replaceChildren();
+
+    if (allRequests.length === 0) {
+        const emptyMessage = document.createElement("p");
+        emptyMessage.textContent = "No help requests available.";
+        responderRequestList.appendChild(emptyMessage);
+    } else {
+        
+allRequests.forEach(function (request, index) {
+    if (request.status === "Canceled") {
+        return;
+    }
+
+            const card = document.createElement("article");
+            card.className = "card";
+
+            const heading = document.createElement("h3");
+            heading.textContent = "Request #" + (index + 1);
+            card.appendChild(heading);
+
+            const details = [
+                ["Assistance", request.assistance],
+                ["Location", request.location],
+                ["Urgency", request.urgency],
+                ["Status", request.status || "Pending"]
+            ];
+
+            details.forEach(function (detail) {
+                const paragraph = document.createElement("p");
+                const label = document.createElement("strong");
+
+                label.textContent = detail[0] + ": ";
+                paragraph.appendChild(label);
+                paragraph.appendChild(
+                    document.createTextNode(detail[1] || "Not provided")
+                );
+
+                card.appendChild(paragraph);
+            });
+
+            responderRequestList.appendChild(card);
+        });
+    }
+}
+
 
 const requests = allRequests.filter(function (request) {
     return request.userEmail === currentUser.email;
