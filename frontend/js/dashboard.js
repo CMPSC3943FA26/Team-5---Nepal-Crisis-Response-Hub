@@ -63,6 +63,47 @@ const requestHistoryList =
     const allRequests =
     JSON.parse(localStorage.getItem("helpRequests")) || [];
 
+    // Calculate request statistics for the dashboard
+const myRequests = allRequests.filter(function (request) {
+    return request.userEmail === currentUser.email;
+});
+
+const requestSummary = {
+    total: myRequests.length,
+    pending: myRequests.filter(r => !r.status || r.status === "Pending").length,
+    inProgress: myRequests.filter(r => r.status === "In Progress").length,
+    completed: myRequests.filter(r => r.status === "Completed").length,
+    canceled: myRequests.filter(r => r.status === "Canceled").length
+};
+
+const summaryContainer = document.createElement("div");
+summaryContainer.className = "card";
+
+const summaryHeading = document.createElement("h3");
+summaryHeading.textContent = "My Request Summary";
+summaryContainer.appendChild(summaryHeading);
+
+[
+    ["Total Requests", requestSummary.total],
+    ["Pending", requestSummary.pending],
+    ["In Progress", requestSummary.inProgress],
+    ["Completed", requestSummary.completed],
+    ["Canceled", requestSummary.canceled]
+].forEach(function (item) {
+    const paragraph = document.createElement("p");
+    paragraph.textContent = item[0] + ": " + item[1];
+    summaryContainer.appendChild(paragraph);
+});
+
+const dashboardRequestList = document.getElementById("requestList");
+
+if (dashboardRequestList && dashboardRequestList.parentNode) {
+    dashboardRequestList.parentNode.insertBefore(
+        summaryContainer,
+        dashboardRequestList
+    );
+}
+
     
 const assignedRequestList =
     document.getElementById("assignedRequestList");
