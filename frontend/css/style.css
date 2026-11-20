@@ -35,6 +35,8 @@ header {
 
 nav {
     display: flex;
+    flex-wrap: wrap;
+    align-items: center;
     gap: 20px;
 }
 
@@ -216,4 +218,17 @@ footer {
 #registerMessage {
     font-weight: bold;
     margin-top: 10px;
+}
+.language-toggle,
+.contact-save {
+    margin: 0 0 0 0.5rem;
+    padding: 0.35rem 0.6rem;
+}
+
+.language-toggle {
+    border: 1px solid currentColor;
+}
+
+#donationForm[hidden] {
+    display: none;
 }

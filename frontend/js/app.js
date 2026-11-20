@@ -37,11 +37,12 @@ const request = {
         JSON.stringify(existingRequests)
     );
 
-    formMessage.textContent =
-        "Prototype request saved successfully in this browser.";
+    setInterfaceText(formMessage, "Prototype request saved successfully in this browser.");
 
     helpForm.reset();
     sharedCoordinates = null;
+    locationLookup += 1;
+    locationMessage.textContent = "";
 });
 
 
@@ -184,7 +185,7 @@ alertCard.dataset.notificationId = alertId;
 
         const badge = document.createElement("span");
         badge.classList.add("badge");
-        badge.textContent = "Verified Alert";
+        setInterfaceText(badge, "Verified Alert");
 
         const title = document.createElement("h3");
         title.textContent = crisisAlert.title;
@@ -222,7 +223,7 @@ publishedDate.textContent =
         
 const detailsButton = document.createElement("button");
 detailsButton.type = "button";
-detailsButton.textContent = "View Details";
+setInterfaceText(detailsButton, "View Details");
 
 const detailsContainer = document.createElement("div");
 detailsContainer.hidden = true;
@@ -231,8 +232,8 @@ function addDetail(label, value) {
     const paragraph = document.createElement("p");
     const strong = document.createElement("strong");
 
-    strong.textContent = label + ": ";
-    paragraph.appendChild(strong);
+    setInterfaceText(strong, label);
+    paragraph.append(strong, ": ");
     paragraph.appendChild(
         document.createTextNode(value || "Not provided")
     );
@@ -268,8 +269,7 @@ detailsButton.addEventListener("click", function () {
     const isOpening = detailsContainer.hidden;
 
     detailsContainer.hidden = !isOpening;
-    detailsButton.textContent =
-        isOpening ? "Hide Details" : "View Details";
+    setInterfaceText(detailsButton, isOpening ? "Hide Details" : "View Details");
     detailsButton.setAttribute(
         "aria-expanded",
         String(isOpening)
@@ -390,10 +390,10 @@ if (authNavLink) {
     );
 
     if (loggedInUser) {
-        authNavLink.textContent = "Dashboard";
+        setInterfaceText(authNavLink, "Dashboard");
         authNavLink.href = "dashboard.html";
     } else {
-        authNavLink.textContent = "Login";
+        setInterfaceText(authNavLink, "Login");
         authNavLink.href = "login.html";
     }
 }
@@ -548,6 +548,7 @@ const locationMessage =
     document.getElementById("locationMessage");
 
 let sharedCoordinates = null;
+let locationLookup = 0;
 
 
 const manualLocationInput =
@@ -556,10 +557,10 @@ const manualLocationInput =
 if (manualLocationInput) {
     manualLocationInput.addEventListener("input", function () {
         sharedCoordinates = null;
+        locationLookup += 1;
 
         if (locationMessage) {
-            locationMessage.textContent =
-                "Manual location entered. GPS coordinates will not be shared.";
+            setInterfaceText(locationMessage, "Manual location entered. GPS coordinates will not be shared.");
         }
     });
 }
@@ -568,15 +569,16 @@ if (manualLocationInput) {
 if (useCurrentLocationButton && locationMessage) {
     useCurrentLocationButton.addEventListener("click", function () {
         if (!navigator.geolocation) {
-            locationMessage.textContent =
-                "Your browser does not support location sharing.";
+            setInterfaceText(locationMessage, "Your browser does not support location sharing.");
             return;
         }
 
-        locationMessage.textContent = "Requesting location permission...";
+        setInterfaceText(locationMessage, "Requesting location permission...");
 
+        const lookup = ++locationLookup;
         navigator.geolocation.getCurrentPosition(
             function (position) {
+                if (lookup !== locationLookup) return;
                 const latitude = position.coords.latitude;
                 const longitude = position.coords.longitude;
 
@@ -594,13 +596,12 @@ if (useCurrentLocationButton && locationMessage) {
                         longitude.toFixed(6);
                 }
 
-                locationMessage.textContent =
-                    "Location added. It will be shared when you submit your request.";
+                setInterfaceText(locationMessage, "Location added. It will be shared when you submit your request.");
             },
             function () {
+                if (lookup !== locationLookup) return;
                 sharedCoordinates = null;
-                locationMessage.textContent =
-                    "Location access unavailable or denied. You can enter your location manually.";
+                setInterfaceText(locationMessage, "Location access unavailable or denied. You can enter your location manually.");
             },
             {
                 enableHighAccuracy: false,
