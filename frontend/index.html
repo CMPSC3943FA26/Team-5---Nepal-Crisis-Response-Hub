@@ -20,8 +20,10 @@
     <a href="#recovery">Recovery Support</a>
     <a href="#safety">Safety</a>
     <a href="#help">Request Help</a>
+    <a href="#donate">Donate</a>
 <a href="login.html" id="authNavLink">Login</a>
-</nav>
+    <button type="button" id="languageToggle" class="language-toggle"></button>
+        </nav>
     </div>
 </header>
 
@@ -208,17 +210,22 @@
     
 <article class="card">
     <h3>Emergency Contacts</h3>
+    <p><a href="dashboard.html#savedContacts">View Saved Contacts</a></p>
+    <p id="contactMessage" role="status"></p>
 
     <p><strong>Police:</strong>
         <a href="tel:100">100</a>
+        <button type="button" class="contact-save" data-number="100" data-contact="Police">Save Contact</button>
     </p>
 
     <p><strong>Fire:</strong>
         <a href="tel:101">101</a>
+        <button type="button" class="contact-save" data-number="101" data-contact="Fire">Save Contact</button>
     </p>
 
     <p><strong>Ambulance:</strong>
         <a href="tel:102">102</a>
+        <button type="button" class="contact-save" data-number="102" data-contact="Ambulance">Save Contact</button>
     </p>
 
   
@@ -233,6 +240,7 @@
 <p>
     <strong>Nepal Red Cross Hotline:</strong>
     <a href="tel:1130">1130</a>
+        <button type="button" class="contact-save" data-number="1130" data-contact="Nepal Red Cross Hotline">Save Contact</button>
 </p>
 
     <p class="prototype-warning">
@@ -524,6 +532,21 @@
         </div>
     </section>
 
+    <section id="donate" class="section">
+        <div class="container form-container">
+            <h2>Make a Donation</h2>
+            <p>Classroom simulation. No money is collected.</p>
+            <p id="donationLogin" hidden><a href="login.html">Log in to make a demo donation</a></p>
+
+            <form id="donationForm" hidden>
+                <label for="donationAmount">Amount in Nepali rupees (NPR)</label>
+                <input id="donationAmount" type="number" min="1" max="1000000" step="1" required>
+                <button type="submit">Confirm Demo Donation</button>
+            </form>
+            <p id="donationMessage" role="status"></p>
+            <p><a href="dashboard.html#donationHistory">View Donation History</a></p>
+        </div>
+    </section>
 </main>
 
 
@@ -536,7 +559,10 @@
 </footer>
 
 
+<script src="js/language.js"></script>
 <script src="js/app.js"></script>
+
+<script src="js/community.js"></script>
 
 </body>
 </html>

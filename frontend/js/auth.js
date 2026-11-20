@@ -21,8 +21,7 @@ if (registerForm) {
             document.getElementById("registerMessage");
 
         if (password !== confirmPassword) {
-            message.textContent =
-                "Passwords do not match.";
+            setInterfaceText(message, "Passwords do not match.");
             return;
         }
 
@@ -33,8 +32,7 @@ if (registerForm) {
             users.find(user => user.email === email);
 
         if (existingUser) {
-            message.textContent =
-                "A prototype account with this email already exists.";
+            setInterfaceText(message, "A prototype account with this email already exists.");
             return;
         }
 
@@ -52,8 +50,7 @@ if (registerForm) {
             JSON.stringify(users)
         );
 
-        message.textContent =
-            "Prototype account created successfully.";
+        setInterfaceText(message, "Prototype account created successfully.");
 
         registerForm.reset();
     });
@@ -98,16 +95,14 @@ if (loginForm) {
         JSON.stringify(loggedInUser)
     );
 
-            message.textContent =
-                "Prototype login successful.";
+            setInterfaceText(message, "Prototype login successful.");
 
             setTimeout(function () {
                 window.location.href = "dashboard.html";
             }, 1000);
 
         } else {
-            message.textContent =
-                "Invalid prototype email or password.";
+            setInterfaceText(message, "Invalid prototype email or password.");
         }
     });
 }

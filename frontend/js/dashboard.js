@@ -80,7 +80,7 @@ const summaryContainer = document.createElement("div");
 summaryContainer.className = "card";
 
 const summaryHeading = document.createElement("h3");
-summaryHeading.textContent = "My Request Summary";
+setInterfaceText(summaryHeading, "My Request Summary");
 summaryContainer.appendChild(summaryHeading);
 
 [
@@ -91,7 +91,8 @@ summaryContainer.appendChild(summaryHeading);
     ["Canceled", requestSummary.canceled]
 ].forEach(function (item) {
     const paragraph = document.createElement("p");
-    paragraph.textContent = item[0] + ": " + item[1];
+    setInterfaceText(paragraph, item[0]);
+    paragraph.append(": " + item[1]);
     summaryContainer.appendChild(paragraph);
 });
 
@@ -152,14 +153,15 @@ if (currentUser.role === "responder" && assignedRequestList) {
 
             
 const statusLabel = document.createElement("label");
-statusLabel.textContent = "Update Response Status: ";
+setInterfaceText(statusLabel, "Update Response Status:");
+statusLabel.append(" ");
 
 const statusSelect = document.createElement("select");
 
 ["Pending", "In Progress", "Completed"].forEach(function (status) {
     const option = document.createElement("option");
     option.value = status;
-    option.textContent = status;
+    setInterfaceText(option, status);
     statusSelect.appendChild(option);
 });
 
@@ -175,7 +177,7 @@ if (
     if (request.status === "Canceled") {
         const option = document.createElement("option");
         option.value = "Canceled";
-        option.textContent = "Canceled";
+        setInterfaceText(option, "Canceled");
         statusSelect.appendChild(option);
         statusSelect.value = "Canceled";
     }
@@ -265,6 +267,7 @@ if (requesterMessages.length === 0) {
 }
 
 card.appendChild(messagesSection);
+card.appendChild(createRequestNotes(request));
 
             assignedRequestList.appendChild(card);
         });
@@ -441,7 +444,7 @@ details.forEach(function (detail) {
 const editButton = document.createElement("button");
 
 editButton.type = "button";
-editButton.textContent = "Edit Request";
+setInterfaceText(editButton, "Edit Request");
 
 if (request.status === "Completed" ||
     request.status === "Canceled") {
@@ -501,6 +504,9 @@ if (
     allRequests[originalIndex].description === request.description
 ) {
 
+        if (location !== request.location) {
+            allRequests[originalIndex].coordinates = null;
+        }
         allRequests[originalIndex].location = location;
         allRequests[originalIndex].urgency = urgency;
         allRequests[originalIndex].description = description;
@@ -521,7 +527,7 @@ if (
 ) {
     const contactButton = document.createElement("button");
     contactButton.type = "button";
-    contactButton.textContent = "Contact Responder";
+    setInterfaceText(contactButton, "Contact Responder");
 
     contactButton.addEventListener("click", function () {
         const messageText = prompt(
@@ -584,7 +590,7 @@ card.appendChild(editButton);
 
 const cancelButton = document.createElement("button");
 cancelButton.type = "button";
-cancelButton.textContent = "Cancel Request";
+setInterfaceText(cancelButton, "Cancel Request");
 
 // Completed and canceled requests cannot be canceled
 const currentStatus = request.status || "Pending";
@@ -596,7 +602,7 @@ if (currentStatus === "Completed" ||
 
 cancelButton.addEventListener("click", function () {
     const confirmed = confirm(
-        "Are you sure you want to cancel this help request?"
+        translateLabel("Are you sure you want to cancel this help request?")
     );
 
     if (!confirmed) return;
@@ -638,7 +644,7 @@ card.appendChild(cancelButton);
 
 const notesButton = document.createElement("button");
 notesButton.type = "button";
-notesButton.textContent = "Add Note";
+setInterfaceText(notesButton, "Add Note");
 
 const notesStatus = request.status || "Pending";
 
@@ -648,7 +654,7 @@ if (notesStatus === "Completed" || notesStatus === "Canceled") {
 
 notesButton.addEventListener("click", function () {
     const newNote = prompt(
-        "Enter additional information about your request:"
+        translateLabel("Enter additional information about your request:")
     );
 
     if (newNote === null) return;
@@ -702,33 +708,7 @@ card.appendChild(notesButton);
 
 
 
-const notesSection = document.createElement("div");
-
-const notesHeading = document.createElement("h4");
-notesHeading.textContent = "Additional Notes";
-
-notesSection.appendChild(notesHeading);
-
-if (Array.isArray(request.notes) && request.notes.length > 0) {
-    request.notes.forEach(function (note) {
-        const noteParagraph = document.createElement("p");
-
-        const noteDate = note.createdAt
-            ? new Date(note.createdAt).toLocaleString()
-            : "Date unavailable";
-
-        noteParagraph.textContent =
-            note.text + " — " + noteDate;
-
-        notesSection.appendChild(noteParagraph);
-    });
-} else {
-    const noNotes = document.createElement("p");
-    noNotes.textContent = "No additional notes yet.";
-    notesSection.appendChild(noNotes);
-}
-
-card.appendChild(notesSection);
+card.appendChild(createRequestNotes(request));
 
 
 
@@ -763,15 +743,14 @@ if (
 
     const viewButton = document.createElement("button");
     viewButton.type = "button";
-    viewButton.textContent = "View Details";
+    setInterfaceText(viewButton, "View Details");
     viewButton.setAttribute("aria-expanded", "false");
 
     viewButton.addEventListener("click", function () {
         const opening = detailsPanel.hidden;
 
         detailsPanel.hidden = !opening;
-        viewButton.textContent =
-            opening ? "Hide Details" : "View Details";
+        setInterfaceText(viewButton, opening ? "Hide Details" : "View Details");
 
         viewButton.setAttribute(
             "aria-expanded",
@@ -873,3 +852,34 @@ if (incidentReportForm) {
     });
 }
 
+
+
+function createRequestNotes(request) {
+    const notesSection = document.createElement("div");
+
+    const notesHeading = document.createElement("h4");
+    setInterfaceText(notesHeading, "Additional Notes");
+
+    notesSection.appendChild(notesHeading);
+
+    if (Array.isArray(request.notes) && request.notes.length > 0) {
+        request.notes.forEach(function (note) {
+            const noteParagraph = document.createElement("p");
+
+            const noteDate = note.createdAt
+                ? new Date(note.createdAt).toLocaleString()
+                : "Date unavailable";
+
+            noteParagraph.textContent =
+                note.text + " — " + noteDate;
+
+            notesSection.appendChild(noteParagraph);
+        });
+    } else {
+        const noNotes = document.createElement("p");
+        setInterfaceText(noNotes, "No additional notes yet.");
+        notesSection.appendChild(noNotes);
+    }
+
+    return notesSection;
+}
