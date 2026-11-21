@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Account Settings | Nepal Crisis Response Hub</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body class="workspace-page">
+<header>
+    <div class="container nav">
+        <h1 class="site-brand"><span class="site-crest" aria-hidden="true"></span><span>Nepal Crisis Response Hub</span></h1>
+        <nav>
+            <a href="index.html">Home</a>
+            <a href="dashboard.html">Dashboard</a>
+            <button type="button" id="languageToggle" class="language-toggle"></button>
+        </nav>
+    </div>
+</header>
+
+<main class="section">
+    <div class="container form-container account-settings" id="accountSettings" hidden>
+        <h2>Account Settings</h2>
+
+        <section class="card">
+            <h3>Profile and Contact Info</h3>
+            <form id="profileForm">
+                <label for="accountName">Full Name</label>
+                <input id="accountName" autocomplete="name" maxlength="100" required>
+                <label for="accountEmail">Email</label>
+                <input type="email" id="accountEmail" autocomplete="email" maxlength="254" required>
+                <label for="accountPhone">Phone Number (optional)</label>
+                <input type="tel" id="accountPhone" autocomplete="tel" maxlength="40">
+                <button type="submit">Save Profile</button>
+                <p id="profileMessage" role="status"></p>
+            </form>
+        </section>
+
+        <section class="card">
+            <h3>Change Password</h3>
+            <form id="passwordForm">
+                <label for="currentPassword">Current Password</label>
+                <input type="password" id="currentPassword" autocomplete="current-password" required>
+                <label for="newPassword">New Password</label>
+                <input type="password" id="newPassword" autocomplete="new-password" minlength="8" required>
+                <label for="confirmNewPassword">Confirm New Password</label>
+                <input type="password" id="confirmNewPassword" autocomplete="new-password" minlength="8" required>
+                <button type="submit">Change Password</button>
+                <p id="passwordMessage" role="status"></p>
+            </form>
+        </section>
+
+        <section class="card account-delete">
+            <h3>Delete Account</h3>
+            <p>Deleting your account permanently removes your profile, help requests, incident reports, saved contacts, and demo donation history from this browser.</p>
+            <form id="deleteAccountForm">
+                <label for="deletePassword">Current Password</label>
+                <input type="password" id="deletePassword" autocomplete="current-password" required>
+                <button type="submit">Delete Account</button>
+                <p id="deleteMessage" role="status"></p>
+            </form>
+        </section>
+    </div>
+</main>
+
+<script src="js/language.js"></script>
+<script src="js/accounts.js"></script>
+<script src="js/account-settings.js"></script>
+</body>
+</html>

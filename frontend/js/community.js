@@ -6,7 +6,7 @@
     const contactMessage = document.getElementById("contactMessage");
     const saveButtons = document.querySelectorAll(".contact-save");
 
-    const accountKey = (feature) => `prototype:${feature}:${user.email}`;
+    const accountKey = (feature) => accountRecordsKey(feature, user.email);
     const records = (feature) => JSON.parse(localStorage.getItem(accountKey(feature)) || "[]");
     const saveRecords = (feature, entries) => {
         localStorage.setItem(accountKey(feature), JSON.stringify(entries));
