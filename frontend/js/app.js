@@ -180,6 +180,7 @@ alertCard.dataset.notificationId = alertId;
 
         
         alertCard.dataset.alertLocation = crisisAlert.location || "";
+        alertCard.dataset.severity = (crisisAlert.severity || "").toLowerCase();
 
 
 

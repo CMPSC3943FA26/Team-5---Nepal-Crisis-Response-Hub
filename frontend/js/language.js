@@ -119,6 +119,8 @@ const nepaliLabels = new Map(Object.entries({
     "Cancel Request": "अनुरोध रद्द गर्नुहोस्",
     "Add Note": "टिप्पणी थप्नुहोस्",
     "Contact Responder": "प्रतिकार्यकर्तासँग सम्पर्क गर्नुहोस्",
+    "Submitted by": "अनुरोध पठाउने खाता",
+    "Guest (no account)": "अतिथि (खाता छैन)",
     "Additional Notes": "थप टिप्पणीहरू",
     "No additional notes yet.": "अहिलेसम्म थप टिप्पणी छैन।",
     "No requests found.": "कुनै अनुरोध भेटिएन।",

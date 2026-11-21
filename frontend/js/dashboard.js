@@ -269,6 +269,7 @@ if (requesterMessages.length === 0) {
 card.appendChild(messagesSection);
 card.appendChild(createRequestNotes(request));
 
+            card.append(createRequestSubmitter(request));
             assignedRequestList.appendChild(card);
         });
     }
@@ -763,8 +764,10 @@ if (
     card.appendChild(viewButton);
     card.appendChild(detailsPanel);
 
+    card.append(createRequestSubmitter(request));
     requestHistoryList.appendChild(card);
 } else {
+    card.append(createRequestSubmitter(request));
     requestList.appendChild(card);
 }
 
