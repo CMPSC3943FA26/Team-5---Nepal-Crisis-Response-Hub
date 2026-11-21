@@ -1,4 +1,3 @@
-const ADMIN_EMAIL = "test@example.com";
 const registerForm = document.getElementById("registerForm");
 
 if (registerForm) {
@@ -6,10 +5,10 @@ if (registerForm) {
         event.preventDefault();
 
         const name =
-            document.getElementById("registerName").value;
+            document.getElementById("registerName").value.trim();
 
         const email =
-            document.getElementById("registerEmail").value;
+            document.getElementById("registerEmail").value.trim().toLowerCase();
 
         const password =
             document.getElementById("registerPassword").value;
@@ -20,35 +19,32 @@ if (registerForm) {
         const message =
             document.getElementById("registerMessage");
 
+        if (!name) {
+            setInterfaceText(message, "Enter your name.");
+            return;
+        }
+
         if (password !== confirmPassword) {
             setInterfaceText(message, "Passwords do not match.");
             return;
         }
 
         const users =
-            JSON.parse(localStorage.getItem("prototypeUsers")) || [];
+            readAccountRecords(USERS_KEY);
 
-        const existingUser =
-            users.find(user => user.email === email);
+        const emailTaken = users.some(user => sameAccountEmail(user.email, email));
+        const adminEmailReserved = email === DEMO_ADMIN_EMAIL &&
+            users.some(user => getAccountRole(user) === "admin");
 
-        if (existingUser) {
+        if (emailTaken || adminEmailReserved) {
             setInterfaceText(message, "A prototype account with this email already exists.");
             return;
         }
 
-            users.push({
-            name: name,
-            email: email,
-            password: password,
-            role: document.getElementById("registerVolunteer")?.checked
-            ? "responder"
-            : "user"
-        });
-
-        localStorage.setItem(
-            "prototypeUsers",
-            JSON.stringify(users)
-        );
+        const role = email === DEMO_ADMIN_EMAIL ? "admin" :
+            (document.getElementById("registerVolunteer").checked ? "responder" : "user");
+        users.push({ name, email, password, role });
+        localStorage.setItem(USERS_KEY, JSON.stringify(users));
 
         setInterfaceText(message, "Prototype account created successfully.");
 
@@ -64,7 +60,7 @@ if (loginForm) {
         event.preventDefault();
 
         const email =
-            document.getElementById("loginEmail").value;
+            document.getElementById("loginEmail").value.trim();
 
         const password =
             document.getElementById("loginPassword").value;
@@ -73,27 +69,14 @@ if (loginForm) {
             document.getElementById("loginMessage");
 
         const users =
-            JSON.parse(localStorage.getItem("prototypeUsers")) || [];
+            readAccountRecords(USERS_KEY);
 
-        const user = users.find(
-            account =>
-                account.email === email &&
-                account.password === password
-        );
+        const matchingAccounts = users.filter(account => sameAccountEmail(account.email, email));
+        const exactAccount = matchingAccounts.find(account => account.email === email);
+        const user = exactAccount || (matchingAccounts.length === 1 ? matchingAccounts[0] : null);
 
-       if (user) {
-
-    const loggedInUser = {
-        ...user,
-      role: user.email === ADMIN_EMAIL
-        ? "admin"
-    : (user.role === "responder" ? "responder" : "user")
-    };
-
-    localStorage.setItem(
-        "currentPrototypeUser",
-        JSON.stringify(loggedInUser)
-    );
+        if (user?.password === password) {
+            localStorage.setItem(SESSION_KEY, JSON.stringify(getPublicAccount(user)));
 
             setInterfaceText(message, "Prototype login successful.");
 

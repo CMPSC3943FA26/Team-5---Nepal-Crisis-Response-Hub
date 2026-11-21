@@ -255,3 +255,8 @@ footer p { margin: 0; }
     .alert-location-filter { grid-template-columns: 1fr; gap: .35rem; }
     #clearAlertLocation { justify-self: start; }
 }
+
+.account-settings .card + .card { margin-top: 1rem; }
+.account-settings [role="status"]:empty { display: none; }
+.account-delete button { background: var(--red); }
+.account-delete button:hover { background: var(--red-hover); }
