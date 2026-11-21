@@ -387,6 +387,7 @@ if (Array.isArray(request.notes) && request.notes.length > 0) {
 card.appendChild(notesSection);
 
 
+        card.append(createRequestSubmitter(request));
         adminRequestList.appendChild(card);
     });
 }
