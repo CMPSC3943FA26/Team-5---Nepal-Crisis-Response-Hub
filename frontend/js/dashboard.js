@@ -283,13 +283,88 @@ const responderRequestList =
 if (currentUser.role === "responder" && responderRequestList) {
     responderRequestList.replaceChildren();
 
+const availableCount = allRequests.filter(r =>
+    !r.assignedResponderEmail &&
+    (r.status || "Pending") === "Pending"
+).length;
+
+const activeCount = allRequests.filter(r =>
+    r.assignedResponderEmail === currentUser.email &&
+    ["Pending", "In Progress"].includes(r.status || "Pending")
+).length;
+
+const completedCount = allRequests.filter(r =>
+    r.assignedResponderEmail === currentUser.email &&
+    r.status === "Completed"
+).length;
+
+const statsContainer = document.createElement("div");
+
+statsContainer.style.cssText = `
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    gap: 15px;
+    margin: 20px 0;
+`;
+
+[
+    ["Available Requests", availableCount, "#dc2626"],
+    ["Active Responses", activeCount, "#d97706"],
+    ["Completed Responses", completedCount, "#15803d"],
+    ["Total Assigned", allRequests.filter(r =>
+        r.assignedResponderEmail === currentUser.email
+    ).length, "#2563eb"]
+].forEach(([label, count, color]) => {
+    const stat = document.createElement("div");
+
+    stat.style.cssText = `
+        background: white;
+        border: 1px solid #e2e8f0;
+        border-top: 4px solid ${color};
+        border-radius: 10px;
+        padding: 20px;
+        text-align: center;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+    `;
+
+    const number = document.createElement("h2");
+    number.textContent = count;
+    number.style.color = color;
+
+    const title = document.createElement("p");
+    setInterfaceText(title, label);
+
+    stat.append(number, title);
+    statsContainer.appendChild(stat);
+});
+
+responderRequestList.before(statsContainer);
+
     if (allRequests.length === 0) {
         const emptyMessage = document.createElement("p");
         emptyMessage.textContent = "No help requests available.";
         responderRequestList.appendChild(emptyMessage);
     } else {
         
-allRequests.forEach(function (request, index) {
+
+const urgencyPriority = {
+    "Critical": 4,
+    "High": 3,
+    "Medium": 2,
+    "Low": 1
+};
+
+allRequests
+    .map((request, index) => ({ request, index }))
+    .filter(({ request }) =>
+        !request.assignedResponderEmail &&
+        (request.status || "Pending") === "Pending"
+    )
+    .sort((a, b) =>
+        (urgencyPriority[b.request.urgency] || 0) -
+        (urgencyPriority[a.request.urgency] || 0)
+    )
+    .forEach(function ({ request, index }) {
     if (request.status === "Canceled") {
         return;
     }
@@ -358,6 +433,64 @@ const assignedResponderName = assignedResponder
             });
 
 card.appendChild(assignmentStatus);
+
+
+// Allow responders to accept unassigned requests
+if (
+    !request.assignedResponderEmail &&
+    (request.status || "Pending") === "Pending"
+) {
+    const acceptButton = document.createElement("button");
+    acceptButton.type = "button";
+setInterfaceText(acceptButton, "Accept Request");    acceptButton.style.backgroundColor = "#15803d";
+    acceptButton.style.color = "white";
+    acceptButton.style.marginTop = "10px";
+
+    acceptButton.addEventListener("click", function () {
+        const session = JSON.parse(
+            localStorage.getItem("currentPrototypeUser") || "null"
+        );
+
+        if (!session || session.role !== "responder" ||
+            session.email !== currentUser.email) {
+            alert("Responder access required.");
+            return;
+        }
+
+        const savedRequests = JSON.parse(
+            localStorage.getItem("helpRequests") || "[]"
+        );
+
+        const selectedRequest = savedRequests[index];
+
+        if (
+            !selectedRequest ||
+            selectedRequest.createdAt !== request.createdAt ||
+            selectedRequest.userEmail !== request.userEmail ||
+            selectedRequest.assignedResponderEmail ||
+            (selectedRequest.status || "Pending") !== "Pending"
+        ) {
+            alert("This request is no longer available.");
+            window.location.reload();
+            return;
+        }
+
+        selectedRequest.assignedResponderEmail = session.email;
+        selectedRequest.status = "In Progress";
+        selectedRequest.acceptedAt = new Date().toISOString();
+        selectedRequest.updatedAt = new Date().toISOString();
+
+        localStorage.setItem(
+            "helpRequests",
+            JSON.stringify(savedRequests)
+        );
+
+        alert("Emergency request accepted successfully!");
+        window.location.reload();
+    });
+
+    card.appendChild(acceptButton);
+}
 
             responderRequestList.appendChild(card);
         });

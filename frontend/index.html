@@ -20,6 +20,7 @@
     <a href="#recovery">Recovery Support</a>
     <a href="#safety">Safety</a>
     <a href="#help">Request Help</a>
+    <a href="#missingPersons">Missing Persons</a>
     <a href="#donate">Donate</a>
 <a href="login.html" id="authNavLink">Login</a>
     <button type="button" id="languageToggle" class="language-toggle"></button>
@@ -398,6 +399,60 @@
 </p>
 
 <form id="missingPersonForm">
+
+<label for="missingPersonPhoto">Upload Photo</label>
+<input
+    type="file"
+    id="missingPersonPhoto"
+    accept="image/jpeg,image/png,image/webp"
+>
+
+<img
+    id="missingPersonPhotoPreview"
+    alt="Missing person photo preview"
+    hidden
+    style="width:160px;height:180px;object-fit:cover;
+    border-radius:10px;margin:15px 0;"
+>
+
+<label for="missingPersonAge">Age</label>
+<input
+    type="number"
+    id="missingPersonAge"
+    min="0"
+    max="120"
+    placeholder="Enter age"
+>
+
+<label for="missingPersonGender">Gender</label>
+<select id="missingPersonGender">
+    <option value="">Select gender</option>
+    <option>Male</option>
+    <option>Female</option>
+    <option>Other</option>
+    <option>Unknown</option>
+</select>
+
+<label for="missingPersonHeight">Height</label>
+<input
+    type="text"
+    id="missingPersonHeight"
+    placeholder="Example: 5 feet 7 inches"
+>
+
+<label for="missingPersonClothing">Last Seen Wearing</label>
+<input
+    type="text"
+    id="missingPersonClothing"
+    placeholder="Example: Blue jacket and black pants"
+>
+
+<label for="missingPersonLastSeen">Last Seen Date and Time</label>
+<input
+    type="datetime-local"
+    id="missingPersonLastSeen"
+>
+
     <label for="missingPersonName">Person's Name</label>
     <input
         type="text"
@@ -429,8 +484,7 @@
 </form>
 
 
-        <h2>Search Missing-Person Reports</h2>
-
+<h2>Missing Persons Reports</h2>
         <p>
             Search fictional missing-person reports created
             for classroom demonstration only.
@@ -445,6 +499,16 @@
             id="missingPersonSearch"
             placeholder="Enter a person's name"
         >
+
+
+<label for="missingStatusFilter">Filter by Status</label>
+
+<select id="missingStatusFilter">
+    <option value="missing">Currently Missing</option>
+    <option value="safe">Located Safe</option>
+    <option value="all">All Reports</option>
+</select>
+
 
         <div id="missingPersonResults" class="cards">
             <p>Enter a name to search demonstration reports.</p>
