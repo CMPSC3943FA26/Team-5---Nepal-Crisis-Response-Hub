@@ -202,6 +202,96 @@ const nepaliLabels = new Map(Object.entries({
     "Contact saved to your dashboard.": "सम्पर्क तपाईंको ड्यासबोर्डमा सुरक्षित भयो।"
 }));
 
+
+Object.entries({
+    // Responder Dashboard
+    "Responder Dashboard": "प्रतिकार्यकर्ता ड्यासबोर्ड",
+    "Responder": "प्रतिकार्यकर्ता",
+    "Resident": "स्थानीय बासिन्दा",
+    "Administrator": "प्रशासक",
+    "Available Requests": "उपलब्ध अनुरोधहरू",
+    "Active Responses": "सक्रिय प्रतिकार्यहरू",
+    "Completed Responses": "सम्पन्न प्रतिकार्यहरू",
+    "Total Assigned": "कुल तोकिएका अनुरोधहरू",
+    "Accept Request": "अनुरोध स्वीकार गर्नुहोस्",
+    "Assigned Responder": "तोकिएको प्रतिकार्यकर्ता",
+    "Messages From Requester": "अनुरोधकर्ताबाट प्राप्त सन्देशहरू",
+    "Emergency request accepted successfully!": "आपत्कालीन अनुरोध सफलतापूर्वक स्वीकार गरियो।",
+
+    // Missing Persons
+    "Missing Persons": "बेपत्ता व्यक्तिहरू",
+    "Missing Persons Reports": "बेपत्ता व्यक्तिहरूको विवरण",
+    "Report a Missing Person": "बेपत्ता व्यक्तिको विवरण दर्ता गर्नुहोस्",
+    "Upload Photo": "फोटो अपलोड गर्नुहोस्",
+    "Person's Name": "व्यक्तिको नाम",
+    "Age": "उमेर",
+    "Enter age": "उमेर लेख्नुहोस्",
+    "Gender": "लिङ्ग",
+    "Select gender": "लिङ्ग छान्नुहोस्",
+    "Male": "पुरुष",
+    "Female": "महिला",
+    "Unknown": "अज्ञात",
+    "Height": "उचाइ",
+    "Last Seen Wearing": "अन्तिम पटक लगाएको कपडा",
+    "Last Seen Date and Time": "अन्तिम पटक देखिएको मिति र समय",
+    "Last Known Location": "अन्तिम ज्ञात स्थान",
+    "Last Seen": "अन्तिम पटक देखिएको",
+    "Identifying Features": "पहिचानका विशेषताहरू",
+    "Clothing": "कपडा",
+    "Missing": "बेपत्ता",
+    "Located - Safe": "फेला परेको - सुरक्षित",
+    "Located Safe": "सुरक्षित अवस्थामा फेला परेको",
+    "Reported Status": "रिपोर्ट गरिएको स्थिति",
+    "Search by name or location": "नाम वा स्थानबाट खोज्नुहोस्",
+    "Submit Missing-Person Report": "बेपत्ता व्यक्तिको विवरण पठाउनुहोस्",
+    "No matching reports found.": "मिल्दो विवरण भेटिएन।",
+    "Fictional missing-person report saved successfully.": "नमुना बेपत्ता व्यक्तिको विवरण सफलतापूर्वक सुरक्षित भयो।",
+
+    // Safety Verification
+    "Request to Mark as Safe": "सुरक्षित भएको पुष्टि गर्न अनुरोध गर्नुहोस्",
+    "Verification Pending": "प्रमाणीकरण बाँकी",
+    "Pending Verification": "प्रमाणीकरण बाँकी",
+    "Pending Safety Verification": "सुरक्षा पुष्टि गर्न बाँकी",
+    "Mark as Safe": "सुरक्षित भएको चिन्ह लगाउनुहोस्",
+    "Approve": "स्वीकृत गर्नुहोस्",
+    "Reject": "अस्वीकृत गर्नुहोस्",
+    "Approved": "स्वीकृत",
+    "Rejected": "अस्वीकृत",
+    "Requested by": "अनुरोधकर्ता",
+    "Supporting information": "थप प्रमाणित जानकारी",
+    "Submitted": "पेश गरिएको",
+
+    // Admin Management
+    "Missing Persons Management": "बेपत्ता व्यक्तिहरूको व्यवस्थापन",
+    "Manage missing person reports and review safety confirmation requests.": "बेपत्ता व्यक्तिहरूको विवरण व्यवस्थापन गर्नुहोस् र सुरक्षा पुष्टि अनुरोधहरू समीक्षा गर्नुहोस्।",
+    "Currently Missing": "हाल बेपत्ता",
+    "All Reports": "सबै विवरणहरू",
+    "Filter Missing Persons Reports": "बेपत्ता व्यक्तिहरूको विवरण छान्नुहोस्",
+    "Remove Report": "विवरण हटाउनुहोस्",
+    "Report removed successfully.": "विवरण सफलतापूर्वक हटाइयो।",
+    "Missing person successfully marked as safe.": "बेपत्ता व्यक्ति सुरक्षित भएको पुष्टि गरियो।",
+    "Safety confirmation rejected.": "सुरक्षा पुष्टि अनुरोध अस्वीकृत भयो।",
+
+    // Private Messaging
+    "Messages": "सन्देशहरू",
+    "Private Messages": "निजी सन्देशहरू",
+    "Conversations": "वार्तालापहरू",
+    "Communicate directly with the administrator.": "प्रशासकसँग सिधै सम्पर्क गर्नुहोस्।",
+    "Select a conversation": "वार्तालाप छान्नुहोस्",
+    "No conversation selected.": "कुनै वार्तालाप छानिएको छैन।",
+    "Write a message": "सन्देश लेख्नुहोस्",
+    "Type your message...": "आफ्नो सन्देश लेख्नुहोस्...",
+    "Send Message": "सन्देश पठाउनुहोस्",
+    "Message sent successfully.": "सन्देश सफलतापूर्वक पठाइयो।",
+    "No incoming messages yet.": "अहिलेसम्म कुनै सन्देश प्राप्त भएको छैन।",
+    "Start a conversation by sending a message.": "सन्देश पठाएर वार्तालाप सुरु गर्नुहोस्।",
+    "Classroom simulation only. Messages are stored in this browser and do not contact real emergency services.": "कक्षाको अभ्यासका लागि मात्र। सन्देशहरू यस ब्राउजरमा सुरक्षित हुन्छन् र वास्तविक आपत्कालीन सेवामा पठाइँदैनन्।"
+    
+}).forEach(([english, nepali]) => {
+    nepaliLabels.set(english, nepali);
+});
+
+
 const interfaceText = new WeakMap();
 const interfacePlaceholders = new WeakMap();
 const languageToggle = document.getElementById("languageToggle");

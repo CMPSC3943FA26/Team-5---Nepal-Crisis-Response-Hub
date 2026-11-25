@@ -647,23 +647,33 @@ function renderMissingPersonResults() {
 
     missingPersonResults.replaceChildren();
 
-    if (!searchText) {
-        const message = document.createElement("p");
-        message.textContent =
-            "Enter a name to search demonstration reports.";
-        missingPersonResults.appendChild(message);
-        return;
-    }
+   
 
     const reports = [
         ...demoMissingPersons,
         ...JSON.parse(localStorage.getItem("missingPersons") || "[]")
     ];
 
-    const matches = reports.filter(function (person) {
-        return typeof person.name === "string" &&
-            person.name.toLowerCase().includes(searchText);
-    });
+    
+
+const selectedStatus =
+    document.getElementById("missingStatusFilter")?.value || "missing";
+
+const matches = reports.filter(function (person) {
+    const matchesSearch =
+        (person.name || "").toLowerCase().includes(searchText) ||
+        (person.lastKnownLocation || "").toLowerCase().includes(searchText);
+
+    const isSafe = person.status === "Located - Safe";
+
+    const matchesStatus =
+        selectedStatus === "all" ||
+        (selectedStatus === "missing" && !isSafe) ||
+        (selectedStatus === "safe" && isSafe);
+
+    return matchesSearch && matchesStatus;
+}).reverse();
+
 
     if (matches.length === 0) {
         const message = document.createElement("p");
@@ -688,7 +698,82 @@ function renderMissingPersonResults() {
         status.textContent =
             "Reported Status: " + (person.status || "Missing");
 
-        card.append(heading, location, status);
+        if (person.status === "Located - Safe") {
+    card.append(heading, status);
+} else {
+    card.append(heading, location, status);
+}
+
+
+// Display missing person photograph
+if (
+    person.status !== "Located - Safe" &&
+    person.photo &&
+    /^data:image\/(jpeg|png|webp);base64,/.test(person.photo)
+) {
+    const photo = document.createElement("img");
+
+    photo.src = person.photo;
+    photo.alt = "Photograph of " + person.name;
+
+    photo.style.cssText = `
+        width: 100%;
+        height: 230px;
+        object-fit: cover;
+        border-radius: 10px;
+        margin-bottom: 15px;
+    `;
+
+    card.prepend(photo);
+}
+
+// Display identifying information
+const personDetails = [
+    ["Age", person.age],
+    ["Gender", person.gender],
+    ["Height", person.height],
+    ["Last Seen Wearing", person.clothing],
+    ["Last Seen", person.lastSeen
+        ? new Date(person.lastSeen).toLocaleString()
+        : ""],
+    ["Identifying Features", person.description]
+];
+
+personDetails.forEach(function ([label, value]) {
+    if (person.status === "Located - Safe") return;
+    if (!value) return;
+
+    const paragraph = document.createElement("p");
+    const strong = document.createElement("strong");
+
+    strong.textContent = label + ": ";
+    paragraph.append(strong, document.createTextNode(value));
+
+    card.appendChild(paragraph);
+});
+
+status.style.color =
+    person.status === "Located - Safe"
+        ? "#15803d"
+        : "#dc2626";
+
+status.style.fontWeight = "bold";
+
+
+status.style.cssText += `
+    display: inline-block;
+    padding: 7px 12px;
+    border-radius: 20px;
+    font-size: 13px;
+    background: ${
+        person.status === "Located - Safe"
+            ? "#dcfce7"
+            : "#fee2e2"
+    };
+    margin: 8px 0;
+`;
+
+
         
 const loggedInUser = JSON.parse(
     localStorage.getItem("currentPrototypeUser") || "null"
@@ -706,6 +791,273 @@ const reportIndex = savedReports.findIndex(function (report) {
     );
 });
 
+
+if (
+    loggedInUser &&
+    ["user", "responder"].includes(loggedInUser.role) &&
+    reportIndex !== -1 &&
+    person.status === "Missing"
+) {
+    const requestSafeButton = document.createElement("button");
+
+    requestSafeButton.type = "button";
+    requestSasetInterfaceText(requestSafeButton, "Request to Mark as Safe");feButton.textContent = "Request to Mark as Safe";
+
+    requestSafeButton.style.cssText = `
+        background: #15803d;
+        color: white;
+        margin-top: 12px;
+        width: 100%;
+    `;
+
+    const alreadyRequested = (person.safetyRequests || []).some(
+        request =>
+            request.requestedBy === loggedInUser.email &&
+            request.status === "Pending"
+    );
+
+    if (alreadyRequested) {
+        setInterfaceText(requestSafeButton, "Verification Pending");
+        requestSafeButton.disabled = true;
+        requestSafeButton.style.background = "#d97706";
+    }
+
+    requestSafeButton.addEventListener("click", function () {
+        const details = prompt(
+            "Where was the person found? Provide supporting information."
+        );
+
+        if (!details || !details.trim()) return;
+
+        const session = JSON.parse(
+            localStorage.getItem("currentPrototypeUser") || "null"
+        );
+
+        if (!session ||
+            !["user", "responder"].includes(session.role) ||
+            session.email !== loggedInUser.email) {
+            alert("Please log in again.");
+            return;
+        }
+
+        const latestReports = JSON.parse(
+            localStorage.getItem("missingPersons") || "[]"
+        );
+
+        const report = latestReports[reportIndex];
+
+        if (!report ||
+            report.createdAt !== person.createdAt ||
+            report.name !== person.name ||
+            report.status !== "Missing") {
+            alert("This report is no longer available.");
+            renderMissingPersonResults();
+            return;
+        }
+
+        if (!Array.isArray(report.safetyRequests)) {
+            report.safetyRequests = [];
+        }
+
+        if (report.safetyRequests.some(r =>
+            r.requestedBy === session.email &&
+            r.status === "Pending"
+        )) {
+            alert("You already have a pending request.");
+            return;
+        }
+
+        report.safetyRequests.push({
+            id: crypto.randomUUID(),
+            requestedBy: session.email,
+            requesterName: session.name,
+            requesterRole: session.role,
+            details: details.trim(),
+            status: "Pending",
+            createdAt: new Date().toISOString()
+        });
+
+        try {
+            localStorage.setItem(
+                "missingPersons",
+                JSON.stringify(latestReports)
+            );
+        } catch (error) {
+            alert("Unable to save safety confirmation.");
+            return;
+        }
+
+        alert("Safety confirmation submitted for admin verification.");
+
+        renderMissingPersonResults();
+    });
+
+    card.appendChild(requestSafeButton);
+}
+
+
+if (
+    loggedInUser &&
+    loggedInUser.role === "admin" &&
+    reportIndex !== -1 &&
+    person.status === "Missing"
+) {
+    const pendingRequests = (person.safetyRequests || [])
+        .filter(r => r.status === "Pending");
+
+    if (pendingRequests.length > 0) {
+        const verificationPanel = document.createElement("div");
+
+        verificationPanel.style.cssText = `
+            background: #fff7ed;
+            border: 1px solid #fdba74;
+            border-radius: 10px;
+            padding: 15px;
+            margin-top: 15px;
+        `;
+
+        const title = document.createElement("h4");
+        title.textContent = "Pending Safety Verification";
+        title.style.color = "#c2410c";
+
+        verificationPanel.appendChild(title);
+
+        pendingRequests.forEach(function (safeRequest) {
+            const requestBox = document.createElement("div");
+
+            requestBox.style.cssText = `
+                background: white;
+                padding: 12px;
+                border-radius: 8px;
+                margin-top: 10px;
+            `;
+
+            const sender = document.createElement("p");
+            sender.textContent =
+                "Requested by: " + safeRequest.requesterName +
+                " (" + safeRequest.requesterRole + ")";
+
+            const details = document.createElement("p");
+            details.textContent =
+                "Supporting information: " + safeRequest.details;
+
+            const date = document.createElement("p");
+            date.textContent =
+                "Submitted: " +
+                new Date(safeRequest.createdAt).toLocaleString();
+
+            const approveButton = document.createElement("button");
+            approveButton.type = "button";
+            setInterfaceText(approveButton, "Approve");
+            approveButton.style.background = "#15803d";
+            approveButton.style.color = "white";
+
+            const rejectButton = document.createElement("button");
+            rejectButton.type = "button";
+            setInterfaceText(rejectButton, "Reject");
+            rejectButton.style.background = "#dc2626";
+            rejectButton.style.color = "white";
+            rejectButton.style.marginLeft = "8px";
+
+            function reviewSafetyRequest(approved) {
+                const session = JSON.parse(
+                    localStorage.getItem("currentPrototypeUser") || "null"
+                );
+
+                if (!session || session.role !== "admin") {
+                    alert("Administrator access required.");
+                    return;
+                }
+
+                const reports = JSON.parse(
+                    localStorage.getItem("missingPersons") || "[]"
+                );
+
+                const report = reports[reportIndex];
+
+                if (!report ||
+                    report.createdAt !== person.createdAt ||
+                    report.name !== person.name ||
+                    report.status !== "Missing") {
+                    alert("This report has changed.");
+                    renderMissingPersonResults();
+                    return;
+                }
+
+                const targetRequest = (report.safetyRequests || [])
+                    .find(r => r.id === safeRequest.id);
+
+                if (!targetRequest ||
+                    targetRequest.status !== "Pending") {
+                    alert("This request has already been reviewed.");
+                    renderMissingPersonResults();
+                    return;
+                }
+
+                if (approved && !confirm(
+                    "Confirm that this fictional missing person has been verified safe?"
+                )) return;
+
+                targetRequest.status = approved
+                    ? "Approved"
+                    : "Rejected";
+
+                targetRequest.reviewedBy = session.email;
+                targetRequest.reviewedAt = new Date().toISOString();
+
+                if (approved) {
+                    report.status = "Located - Safe";
+                    report.updatedAt = new Date().toISOString();
+
+                    report.safetyRequests.forEach(r => {
+                        if (r.status === "Pending") {
+                            r.status = "Closed";
+                        }
+                    });
+                }
+
+                try {
+                    localStorage.setItem(
+                        "missingPersons",
+                        JSON.stringify(reports)
+                    );
+                } catch (error) {
+                    alert("Unable to save verification.");
+                    return;
+                }
+
+                alert(approved
+                    ? "Missing person successfully marked as safe."
+                    : "Safety confirmation request rejected."
+                );
+
+                renderMissingPersonResults();
+            }
+
+            approveButton.addEventListener("click", function () {
+                reviewSafetyRequest(true);
+            });
+
+            rejectButton.addEventListener("click", function () {
+                reviewSafetyRequest(false);
+            });
+
+            requestBox.append(
+                sender,
+                details,
+                date,
+                approveButton,
+                rejectButton
+            );
+
+            verificationPanel.appendChild(requestBox);
+        });
+
+        card.appendChild(verificationPanel);
+    }
+}
+
+
 if (
     loggedInUser &&
     loggedInUser.role === "admin" &&
@@ -714,8 +1066,7 @@ if (
 ) {
     const safeButton = document.createElement("button");
     safeButton.type = "button";
-    safeButton.textContent = "Mark as Safe";
-
+setInterfaceText(safeButton, "Mark as Safe");
     safeButton.addEventListener("click", function () {
         const confirmed = confirm(
             "Mark this fictional person as located and safe?"
@@ -766,6 +1117,52 @@ if (missingPersonSearch && missingPersonResults) {
     renderMissingPersonResults();
 }
 
+
+const missingPhotoInput =
+    document.getElementById("missingPersonPhoto");
+
+const missingPhotoPreview =
+    document.getElementById("missingPersonPhotoPreview");
+
+let missingPhotoData = "";
+
+if (missingPhotoInput && missingPhotoPreview) {
+    missingPhotoInput.addEventListener("change", function () {
+        const file = missingPhotoInput.files[0];
+
+        missingPhotoData = "";
+        missingPhotoPreview.hidden = true;
+        missingPhotoPreview.removeAttribute("src");
+
+        if (!file) return;
+
+        if (!["image/jpeg", "image/png", "image/webp"].includes(file.type)) {
+            alert("Please upload a JPG, PNG, or WEBP image.");
+            missingPhotoInput.value = "";
+            return;
+        }
+
+        if (file.size > 500 * 1024) {
+            alert("Please select an image smaller than 500 KB.");
+            missingPhotoInput.value = "";
+            return;
+        }
+
+        const reader = new FileReader();
+
+        reader.onload = function () {
+            if (missingPhotoInput.files[0] !== file) return;
+
+            missingPhotoData = reader.result;
+            missingPhotoPreview.src = missingPhotoData;
+            missingPhotoPreview.hidden = false;
+        };
+
+        reader.readAsDataURL(file);
+    });
+}
+
+
 const missingPersonForm =
     document.getElementById("missingPersonForm");
 
@@ -794,23 +1191,47 @@ if (missingPersonForm) {
             localStorage.getItem("missingPersons") || "[]"
         );
 
-        reports.push({
-            name: name,
-            lastKnownLocation: lastKnownLocation,
-            description: description,
-            status: "Missing",
-            createdAt: new Date().toISOString()
-        });
+        
+if (missingPhotoInput.files.length && !missingPhotoData) {
+    message.textContent = "Please wait for the photo to load.";
+    return;
+}
 
-        localStorage.setItem(
-            "missingPersons",
-            JSON.stringify(reports)
-        );
+reports.push({
+    id: crypto.randomUUID(),
+    name: name,
+    lastKnownLocation: lastKnownLocation,
+    description: description,
+    age: document.getElementById("missingPersonAge").value,
+    gender: document.getElementById("missingPersonGender").value,
+    height: document.getElementById("missingPersonHeight").value,
+    clothing: document.getElementById("missingPersonClothing").value,
+    lastSeen: document.getElementById("missingPersonLastSeen").value,
+    photo: missingPhotoData,
+    status: "Missing",
+    createdAt: new Date().toISOString()
+});
+
+
+       
+try {
+    localStorage.setItem(
+        "missingPersons",
+        JSON.stringify(reports)
+    );
+} catch (error) {
+    message.textContent =
+        "Unable to save report. Browser storage may be full.";
+    return;
+}
 
         message.textContent =
             "Fictional missing-person report saved successfully.";
 
         missingPersonForm.reset();
+        missingPhotoData = "";
+        missingPhotoPreview.hidden = true;
+        missingPhotoPreview.removeAttribute("src");
 
         // Refresh any existing search results
         if (typeof renderMissingPersonResults === "function") {
@@ -818,3 +1239,8 @@ if (missingPersonForm) {
         }
     });
 }
+
+
+document.getElementById("missingStatusFilter")
+    ?.addEventListener("change", renderMissingPersonResults);
+

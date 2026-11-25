@@ -18,6 +18,9 @@
             <a href="dashboard.html">Dashboard</a>
             <a href="#publish">Publish Alert</a>
             <button type="button" id="languageToggle" class="language-toggle"></button>
+            <script src="js/message-notifications.js"></script>
+            <a href="messages.html">Messages</a>
+            <a href="#missingManagement">Missing Persons</a>
         </nav>
     </div>
 </header>
@@ -163,6 +166,40 @@
 </section>
 
 
+<section id="missingManagement" class="section">
+    <div class="container">
+
+        <h2>Missing Persons Management</h2>
+
+        <p>
+            Manage missing person reports and review
+            safety confirmation requests.
+        </p>
+
+        <div id="missingAdminStats" class="cards"></div>
+
+        <label for="missingAdminFilter">
+            Filter Missing Persons Reports
+        </label>
+
+        <select id="missingAdminFilter">
+            <option value="all">All Reports</option>
+            <option value="missing">Currently Missing</option>
+            <option value="pending">Pending Verification</option>
+            <option value="safe">Located Safe</option>
+        </select>
+
+        <div id="missingAdminList" class="cards"
+             style="margin-top:20px;">
+        </div>
+
+        <p id="missingAdminMessage" role="status"></p>
+
+    </div>
+</section>
+
+
+
 </main>
 
 <footer>
@@ -177,6 +214,6 @@
 <script src="js/accounts.js"></script>
 <script src="js/request-card.js"></script>
 <script src="js/admin.js"></script>
-
+<script src="js/missing-admin.js"></script>
 </body>
 </html>

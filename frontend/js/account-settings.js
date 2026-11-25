@@ -53,6 +53,74 @@
                 changes.push([accountRecordsKey(feature, newEmail), records]);
             }
         }
+
+
+// Update private messaging records
+const privateMessages = readAccountRecords("prototypePrivateMessages")
+    .filter(message =>
+        newEmail !== null ||
+        (
+            message.conversationId !== oldEmail &&
+            message.senderEmail !== oldEmail
+        )
+    )
+    .map(message => ({
+        ...message,
+        conversationId:
+            message.conversationId === oldEmail
+                ? newEmail
+                : message.conversationId,
+        senderEmail:
+            message.senderEmail === oldEmail
+                ? newEmail
+                : message.senderEmail
+    }));
+
+changes.push([
+    "prototypePrivateMessages",
+    JSON.stringify(privateMessages)
+]);
+
+// Update missing person safety confirmation records
+const missingReports = readAccountRecords("missingPersons")
+    .map(report => {
+        const updated = { ...report };
+
+        if (Array.isArray(updated.safetyRequests)) {
+            updated.safetyRequests = updated.safetyRequests
+                .map(request => {
+                    const revised = { ...request };
+
+                    if (revised.requestedBy === oldEmail) {
+                        revised.requestedBy = newEmail;
+
+                        if (newEmail === null) {
+                            revised.requesterName = "Deleted Account";
+
+                            if (revised.status === "Pending") {
+                                revised.status = "Withdrawn";
+                                revised.details = "";
+                            }
+                        }
+                    }
+
+                    if (revised.reviewedBy === oldEmail) {
+                        revised.reviewedBy = newEmail;
+                    }
+
+                    return revised;
+                });
+        }
+
+        return updated;
+    });
+
+changes.push([
+    "missingPersons",
+    JSON.stringify(missingReports)
+]);
+
+
         return changes;
     }
 
