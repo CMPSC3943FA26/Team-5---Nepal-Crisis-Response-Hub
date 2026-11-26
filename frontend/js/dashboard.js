@@ -152,69 +152,13 @@ if (currentUser.role === "responder" && assignedRequestList) {
             card.prepend(heading);
 
             
-const statusLabel = document.createElement("label");
-setInterfaceText(statusLabel, "Update Response Status:");
-statusLabel.append(" ");
 
-const statusSelect = document.createElement("select");
+card.appendChild(createResponseTimeline(request));
 
-["Pending", "In Progress", "Completed"].forEach(function (status) {
-    const option = document.createElement("option");
-    option.value = status;
-    setInterfaceText(option, status);
-    statusSelect.appendChild(option);
-});
+card.appendChild(
+    createResponseProgressButton(request)
+);
 
-statusSelect.value = request.status || "Pending";
-
-// Finished or canceled requests cannot be updated
-if (
-    request.status === "Completed" ||
-    request.status === "Canceled"
-) {
-    statusSelect.disabled = true;
-
-    if (request.status === "Canceled") {
-        const option = document.createElement("option");
-        option.value = "Canceled";
-        setInterfaceText(option, "Canceled");
-        statusSelect.appendChild(option);
-        statusSelect.value = "Canceled";
-    }
-}
-
-statusSelect.addEventListener("change", function () {
-    const savedRequests =
-        JSON.parse(localStorage.getItem("helpRequests") || "[]");
-
-    const originalIndex = allRequests.indexOf(request);
-    const savedRequest = savedRequests[originalIndex];
-
-    if (
-        !savedRequest ||
-        savedRequest.assignedResponderEmail !== currentUser.email ||
-        !["Pending", "In Progress"].includes(
-            savedRequest.status || "Pending"
-        )
-    ) {
-        alert("Request cannot be updated. Please refresh.");
-        window.location.reload();
-        return;
-    }
-
-    savedRequest.status = statusSelect.value;
-    savedRequest.updatedAt = new Date().toISOString();
-
-    localStorage.setItem(
-        "helpRequests",
-        JSON.stringify(savedRequests)
-    );
-
-    window.location.reload();
-});
-
-statusLabel.appendChild(statusSelect);
-card.appendChild(statusLabel);
 
 
 if (
@@ -442,11 +386,25 @@ if (
 ) {
     const acceptButton = document.createElement("button");
     acceptButton.type = "button";
+
+if (getResponderAvailability(currentUser.email) !== "Available") {
+    acceptButton.disabled = true;
+    acceptButton.style.opacity = "0.5";
+    acceptButton.title =
+        "Change your availability to Available to accept requests.";
+}
+
 setInterfaceText(acceptButton, "Accept Request");    acceptButton.style.backgroundColor = "#15803d";
     acceptButton.style.color = "white";
     acceptButton.style.marginTop = "10px";
 
     acceptButton.addEventListener("click", function () {
+
+if (getResponderAvailability(currentUser.email) !== "Available") {
+    alert("You must be available to accept emergency requests.");
+    return;
+}
+
         const session = JSON.parse(
             localStorage.getItem("currentPrototypeUser") || "null"
         );
@@ -477,6 +435,7 @@ setInterfaceText(acceptButton, "Accept Request");    acceptButton.style.backgrou
 
         selectedRequest.assignedResponderEmail = session.email;
         selectedRequest.status = "In Progress";
+        selectedRequest.responseStage = 1;
         selectedRequest.acceptedAt = new Date().toISOString();
         selectedRequest.updatedAt = new Date().toISOString();
 
@@ -717,6 +676,8 @@ if (
 
     card.appendChild(contactButton);
 }
+
+card.appendChild(createResponseTimeline(request));
 
 
 card.appendChild(editButton);

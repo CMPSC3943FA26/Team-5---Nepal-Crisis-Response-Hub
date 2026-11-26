@@ -259,6 +259,19 @@ if (loginForm) {
         const user = exactAccount || (matchingAccounts.length === 1 ? matchingAccounts[0] : null);
 
         if (user?.password === password) {
+
+if (user.accountStatus === "Suspended") {
+    localStorage.removeItem(SESSION_KEY);
+
+    setInterfaceText(
+        message,
+        "Your account has been suspended. Please contact the administrator."
+    );
+
+    message.style.color = "#dc2626";
+    return;
+}
+
             localStorage.setItem(SESSION_KEY, JSON.stringify(getPublicAccount(user)));
 
             setInterfaceText(message, "Prototype login successful.");

@@ -22,11 +22,43 @@
             <a href="messages.html">Messages</a>
             <a href="#missingManagement">Missing Persons</a>
             <a href="#responderVerification">Responder Applications</a>
+            <a href="#crisisOverview">Crisis Overview</a>
+            <a href="notifications.html">Notifications</a>
+            <a href="#userManagement">User Management</a>
         </nav>
     </div>
 </header>
 
 <main>
+
+
+<section id="crisisOverview" class="section">
+    <div class="container">
+
+        <h2>Crisis Management Dashboard</h2>
+
+        <p>
+            Monitor emergency activities and coordinate
+            crisis response operations.
+        </p>
+
+        <p class="prototype-warning">
+            Classroom simulation - browser-based data.
+        </p>
+
+        <div id="crisisOverviewStats"></div>
+
+        <div class="card" style="margin-top:25px;">
+
+            <h3>Recent Emergency Activity</h3>
+
+            <div id="recentCrisisActivity"></div>
+
+        </div>
+
+    </div>
+</section>
+
 
     <section id="publish" class="section">
         <div class="container form-container">
@@ -236,6 +268,51 @@
 </section>
 
 
+<section id="userManagement" class="section">
+    <div class="container">
+
+        <h2>User Management</h2>
+
+        <p>
+            Monitor registered accounts and manage
+            account access to the platform.
+        </p>
+
+        <div id="userManagementStats"
+             class="cards"></div>
+
+        <label for="adminUserSearch">
+            Search Users
+        </label>
+
+        <input
+            type="search"
+            id="adminUserSearch"
+            placeholder="Search by name or email..."
+        >
+
+        <label for="adminUserFilter">
+            Filter Accounts
+        </label>
+
+        <select id="adminUserFilter">
+            <option value="all">All Accounts</option>
+            <option value="citizen">Citizens</option>
+            <option value="responder">Verified Responders</option>
+            <option value="pending">Pending Responders</option>
+            <option value="suspended">Suspended Accounts</option>
+        </select>
+
+        <div id="adminUserList"
+             class="cards"
+             style="margin-top: 25px;">
+        </div>
+
+        <p id="adminUserMessage" role="status"></p>
+
+    </div>
+</section>
+
 </main>
 
 <footer>
@@ -252,5 +329,8 @@
 <script src="js/admin.js"></script>
 <script src="js/missing-admin.js"></script>
 <script src="js/responder-verification.js"></script>
+<script src="js/crisis-overview.js"></script>
+<script src="js/notifications.js"></script>
+<script src="js/user-management.js"></script>
 </body>
 </html>
