@@ -6,10 +6,23 @@ function readAccountRecords(key) {
     return JSON.parse(localStorage.getItem(key) || "[]");
 }
 
+
 function getAccountRole(account) {
-    if (account.role === "admin" || account.email === DEMO_ADMIN_EMAIL) return "admin";
-    return account.role === "responder" ? "responder" : "user";
+    if (account.role === "admin") {
+        return "admin";
+    }
+
+    if (
+        account.accountType === "responder" &&
+        account.verificationStatus === "Approved" &&
+        account.role === "responder"
+    ) {
+        return "responder";
+    }
+
+    return "user";
 }
+
 
 function getPublicAccount(account) {
     const { password, ...profile } = account;

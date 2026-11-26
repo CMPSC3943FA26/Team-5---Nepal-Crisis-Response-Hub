@@ -292,6 +292,72 @@ Object.entries({
 });
 
 
+
+Object.entries({
+    "Account Type": "खाताको प्रकार",
+    "Citizen / Resident": "नागरिक / स्थानीय बासिन्दा",
+    "Emergency Responder": "आपत्कालीन प्रतिकार्यकर्ता",
+    "Phone Number": "फोन नम्बर",
+    "Enter phone number": "फोन नम्बर लेख्नुहोस्",
+    "District": "जिल्ला",
+    "Enter your district": "आफ्नो जिल्ला लेख्नुहोस्",
+    "Citizen Identification": "नागरिक पहिचान",
+    "Identification Type": "पहिचानको प्रकार",
+    "Identification Number": "पहिचान नम्बर",
+    "Citizenship Number": "नागरिकता नम्बर",
+    "National ID Number": "राष्ट्रिय परिचयपत्र नम्बर",
+    "Passport Number": "राहदानी नम्बर",
+
+    "Professional Verification": "व्यावसायिक प्रमाणीकरण",
+    "Affiliated Organization": "आबद्ध संस्था",
+    "Enter organization name": "संस्थाको नाम लेख्नुहोस्",
+    "Organization Type": "संस्थाको प्रकार",
+    "Select organization type": "संस्थाको प्रकार छान्नुहोस्",
+    "Nepal Police": "नेपाल प्रहरी",
+    "Nepal Army": "नेपाली सेना",
+    "Armed Police Force": "सशस्त्र प्रहरी बल",
+    "Hospital / Medical Services": "अस्पताल / चिकित्सा सेवा",
+    "Fire and Rescue Services": "दमकल तथा उद्धार सेवा",
+    "NGO / Volunteer Organization": "गैरसरकारी / स्वयंसेवी संस्था",
+    "Professional Role": "व्यावसायिक भूमिका",
+    "Credential Type": "प्रमाणपत्रको प्रकार",
+    "Select credential type": "प्रमाणपत्रको प्रकार छान्नुहोस्",
+    "Responder Certificate": "प्रतिकार्यकर्ता प्रमाणपत्र",
+    "Employee ID": "कर्मचारी परिचयपत्र",
+    "Volunteer Membership ID": "स्वयंसेवक सदस्यता नम्बर",
+    "Professional License": "व्यावसायिक इजाजतपत्र",
+    "Credential Number": "प्रमाणपत्र नम्बर",
+
+    "Responder Applications": "प्रतिकार्यकर्ता आवेदनहरू",
+    "Pending Applications": "विचाराधीन आवेदनहरू",
+    "Approved Responders": "स्वीकृत प्रतिकार्यकर्ताहरू",
+    "Rejected Applications": "अस्वीकृत आवेदनहरू",
+    "Filter Applications": "आवेदनहरू छान्नुहोस्",
+    "All Applications": "सबै आवेदनहरू",
+    "Approve Responder": "प्रतिकार्यकर्ता स्वीकृत गर्नुहोस्",
+    "Reject Application": "आवेदन अस्वीकृत गर्नुहोस्",
+    "Verified Responder": "प्रमाणित प्रतिकार्यकर्ता",
+    "Application Rejected": "आवेदन अस्वीकृत",
+    "Responder Verification Status": "प्रतिकार्यकर्ता प्रमाणीकरण स्थिति",
+    "Verification Status": "प्रमाणीकरण स्थिति",
+
+    "Your application has been approved. You can now respond to emergency requests.": "तपाईंको आवेदन स्वीकृत भएको छ। अब तपाईं आपत्कालीन अनुरोधहरूमा प्रतिकार्य गर्न सक्नुहुन्छ।",
+
+    "Your application is awaiting administrator approval.": "तपाईंको आवेदन प्रशासकको स्वीकृतिको प्रतीक्षामा छ।",
+
+    "Your application was rejected. Please contact the administrator.": "तपाईंको आवेदन अस्वीकृत भएको छ। कृपया प्रशासकसँग सम्पर्क गर्नुहोस्।",
+
+    "Responder accounts require administrator approval before emergency response privileges are granted.": "आपत्कालीन प्रतिकार्यको अधिकार प्राप्त गर्न प्रशासकको स्वीकृति आवश्यक छ।",
+
+    "Review responder credentials and approve or reject professional verification requests.": "प्रतिकार्यकर्ताको प्रमाणपत्र समीक्षा गरी प्रमाणीकरण अनुरोध स्वीकृत वा अस्वीकृत गर्नुहोस्।",
+
+    "Classroom demonstration only. Use fictional identification and credential numbers.": "कक्षाको प्रदर्शनका लागि मात्र। काल्पनिक परिचयपत्र र प्रमाणपत्र नम्बर प्रयोग गर्नुहोस्।"
+
+}).forEach(([english, nepali]) => {
+    nepaliLabels.set(english, nepali);
+});
+
+
 const interfaceText = new WeakMap();
 const interfacePlaceholders = new WeakMap();
 const languageToggle = document.getElementById("languageToggle");
