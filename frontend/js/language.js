@@ -358,6 +358,84 @@ Object.entries({
 });
 
 
+Object.entries({
+    "Crisis Overview": "संकटको समग्र विवरण",
+    "Recent Activity": "हालैका गतिविधिहरू",
+    "Total Alerts": "कुल सूचनाहरू",
+    "Pending Requests": "विचाराधीन अनुरोधहरू",
+    "Active Requests": "सक्रिय अनुरोधहरू",
+    "Resolved Requests": "समाधान भएका अनुरोधहरू",
+    "Verified Responders": "प्रमाणित उद्धारकर्ताहरू",
+    "Pending Responders": "प्रमाणीकरण बाँकी उद्धारकर्ताहरू",
+    "Available Responders": "उपलब्ध उद्धारकर्ताहरू",
+    "Busy Responders": "व्यस्त उद्धारकर्ताहरू",
+    "Offline Responders": "अनुपलब्ध उद्धारकर्ताहरू",
+
+    "Response Timeline": "उद्धार कार्यको प्रगति",
+    "Request Submitted": "अनुरोध पेश गरिएको",
+    "Responder Assigned": "उद्धारकर्ता तोकिएको",
+    "Responder On the Way": "उद्धारकर्ता बाटोमा छन्",
+    "Responder Arrived": "उद्धारकर्ता आइपुगेका छन्",
+    "Emergency Request Resolved": "आपतकालीन अनुरोध समाधान भएको",
+    "On the Way": "बाटोमा",
+    "Arrived": "आइपुगेको",
+    "Mark as Completed": "सम्पन्न भएको जनाउनुहोस्",
+
+    "Responder Availability": "उद्धारकर्ताको उपलब्धता",
+    "Available": "उपलब्ध",
+    "Busy": "व्यस्त",
+    "Offline": "अनुपलब्ध",
+
+    "View Full Details": "पूर्ण विवरण हेर्नुहोस्",
+    "+ Report a Missing Person": "+ बेपत्ता व्यक्तिको विवरण पेश गर्नुहोस्",
+
+    "Notifications": "सूचनाहरू",
+    "Notification Center": "सूचना केन्द्र",
+    "All Notifications": "सबै सूचनाहरू",
+    "Unread Notifications": "नपढिएका सूचनाहरू",
+    "Filter Notifications": "सूचनाहरू छान्नुहोस्",
+    "Mark All as Read": "सबै पढिएको जनाउनुहोस्",
+    "Mark as Read": "पढिएको जनाउनुहोस्",
+    "No notifications found.": "कुनै सूचना भेटिएन।",
+    "Emergency Alerts": "आपतकालीन सूचनाहरू",
+    "Request Updates": "अनुरोधको अद्यावधिक",
+    "Verification Updates": "प्रमाणीकरणको अद्यावधिक",
+    "New Message": "नयाँ सन्देश",
+    "New Emergency Help Request": "नयाँ आपतकालीन सहायता अनुरोध",
+    "Emergency Help Request Submitted": "आपतकालीन सहायता अनुरोध पेश गरिएको",
+    "Responder Application Submitted": "उद्धारकर्ताको आवेदन पेश गरिएको",
+    "Responder Application Approved": "उद्धारकर्ताको आवेदन स्वीकृत",
+    "Responder Application Rejected": "उद्धारकर्ताको आवेदन अस्वीकृत",
+    "Safety Confirmation Submitted": "सुरक्षाको पुष्टि पेश गरिएको",
+    "Safety Confirmation Approved": "सुरक्षाको पुष्टि स्वीकृत",
+    "Safety Confirmation Rejected": "सुरक्षाको पुष्टि अस्वीकृत",
+    "View Details": "विवरण हेर्नुहोस्",
+
+    "User Management": "प्रयोगकर्ता व्यवस्थापन",
+    "Total Users": "कुल प्रयोगकर्ताहरू",
+    "Active Accounts": "सक्रिय खाताहरू",
+    "Suspended Accounts": "निलम्बित खाताहरू",
+    "All Accounts": "सबै खाताहरू",
+    "Search Users": "प्रयोगकर्ता खोज्नुहोस्",
+    "Filter Accounts": "खाताहरू छान्नुहोस्",
+    "Citizens": "नागरिकहरू",
+    "Citizen": "नागरिक",
+    "Administrator": "प्रशासक",
+    "Verified Responder": "प्रमाणित उद्धारकर्ता",
+    "Pending Responder": "प्रमाणीकरण बाँकी उद्धारकर्ता",
+    "Rejected Responder": "अस्वीकृत उद्धारकर्ता",
+    "Suspend Account": "खाता निलम्बन गर्नुहोस्",
+    "Restore Account": "खाता पुनः सक्रिय गर्नुहोस्",
+    "Suspended": "निलम्बित",
+    "Active": "सक्रिय",
+
+    "Your account has been suspended. Please contact the administrator.":
+        "तपाईंको खाता निलम्बन गरिएको छ। कृपया प्रशासकलाई सम्पर्क गर्नुहोस्।"
+
+}).forEach(([english, nepali]) => {
+    nepaliLabels.set(english, nepali);
+});
+
 const interfaceText = new WeakMap();
 const interfacePlaceholders = new WeakMap();
 const languageToggle = document.getElementById("languageToggle");

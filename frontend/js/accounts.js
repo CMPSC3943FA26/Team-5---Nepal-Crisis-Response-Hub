@@ -7,7 +7,12 @@ function readAccountRecords(key) {
 }
 
 
+
 function getAccountRole(account) {
+    if (!account || account.accountStatus === "Suspended") {
+        return "suspended";
+    }
+
     if (account.role === "admin") {
         return "admin";
     }
@@ -22,6 +27,7 @@ function getAccountRole(account) {
 
     return "user";
 }
+
 
 
 function getPublicAccount(account) {
@@ -43,3 +49,36 @@ function accountRecordsKey(feature, email) {
 window.addEventListener("storage", (event) => {
     if (event.key === SESSION_KEY) window.location.reload();
 });
+
+function validateActiveSession() {
+    const session = JSON.parse(
+        localStorage.getItem(SESSION_KEY) || "null"
+    );
+
+    if (!session) return;
+
+    const account = readAccountRecords(USERS_KEY)
+        .find(user =>
+            sameAccountEmail(user.email, session.email)
+        );
+
+    if (!account || account.accountStatus === "Suspended") {
+        localStorage.removeItem(SESSION_KEY);
+
+        alert(
+            "Your account is unavailable or has been suspended."
+        );
+
+        window.location.replace("login.html");
+    }
+}
+
+validateActiveSession();
+
+window.addEventListener("storage", event => {
+    if (event.key === USERS_KEY) {
+        validateActiveSession();
+    }
+});
+
+window.addEventListener("pageshow", validateActiveSession);

@@ -391,7 +391,40 @@
     <div class="container">
 
         
-<h2>Report a Missing Person</h2>
+<h2>Missing Persons Reports</h2>
+        <p>
+            Search fictional missing-person reports created
+            for classroom demonstration only.
+        </p>
+
+        <label for="missingPersonSearch">
+            Search by Name
+        </label>
+
+        <input
+            type="search"
+            id="missingPersonSearch"
+            placeholder="Enter a person's name"
+        >
+
+
+<label for="missingStatusFilter">Filter by Status</label>
+
+<select id="missingStatusFilter">
+    <option value="missing">Currently Missing</option>
+    <option value="safe">Located Safe</option>
+    <option value="all">All Reports</option>
+</select>
+
+
+        <div id="missingPersonResults" class="cards">
+            <p>Enter a name to search demonstration reports.</p>
+        </div>
+
+<details class="missing-report-form">
+    <summary>+ Report a Missing Person</summary>
+
+    <h2>Report a Missing Person</h2>
 
 <p>
     Submit a fictional missing-person report for
@@ -482,37 +515,10 @@
 
     <p id="missingPersonMessage" role="status"></p>
 </form>
+</details>
 
 
-<h2>Missing Persons Reports</h2>
-        <p>
-            Search fictional missing-person reports created
-            for classroom demonstration only.
-        </p>
 
-        <label for="missingPersonSearch">
-            Search by Name
-        </label>
-
-        <input
-            type="search"
-            id="missingPersonSearch"
-            placeholder="Enter a person's name"
-        >
-
-
-<label for="missingStatusFilter">Filter by Status</label>
-
-<select id="missingStatusFilter">
-    <option value="missing">Currently Missing</option>
-    <option value="safe">Located Safe</option>
-    <option value="all">All Reports</option>
-</select>
-
-
-        <div id="missingPersonResults" class="cards">
-            <p>Enter a name to search demonstration reports.</p>
-        </div>
     </div>
 </section>
 

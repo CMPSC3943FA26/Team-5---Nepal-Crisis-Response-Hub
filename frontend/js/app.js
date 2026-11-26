@@ -739,18 +739,41 @@ const personDetails = [
     ["Identifying Features", person.description]
 ];
 
-personDetails.forEach(function ([label, value]) {
-    if (person.status === "Located - Safe") return;
-    if (!value) return;
 
-    const paragraph = document.createElement("p");
-    const strong = document.createElement("strong");
+if (person.status !== "Located - Safe") {
+    const detailsPanel = document.createElement("details");
+    detailsPanel.className = "missing-person-details";
 
-    strong.textContent = label + ": ";
-    paragraph.append(strong, document.createTextNode(value));
+    const summary = document.createElement("summary");
 
-    card.appendChild(paragraph);
-});
+    setInterfaceText(summary, "View Full Details");
+
+    detailsPanel.appendChild(summary);
+
+    let detailCount = 0;
+
+    personDetails.forEach(function ([label, value]) {
+        if (!value) return;
+
+        const paragraph = document.createElement("p");
+        const strong = document.createElement("strong");
+
+        setInterfaceText(strong, label);
+
+        paragraph.append(
+            strong,
+            document.createTextNode(": " + value)
+        );
+
+        detailsPanel.appendChild(paragraph);
+        detailCount++;
+    });
+
+    if (detailCount > 0) {
+        card.appendChild(detailsPanel);
+    }
+}
+
 
 status.style.color =
     person.status === "Located - Safe"

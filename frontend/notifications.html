@@ -1,0 +1,88 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>Notifications | Nepal Crisis Response Hub</title>
+
+    <link rel="stylesheet" href="css/style.css">
+</head>
+
+<body class="workspace-page">
+
+<header>
+    <div class="container nav">
+
+        <h1 class="site-brand">
+            Nepal Crisis Response Hub
+        </h1>
+
+        <nav>
+            <a href="index.html">Home</a>
+            <a href="dashboard.html">Dashboard</a>
+            <a href="messages.html">Messages</a>
+            <a href="notifications.html">Notifications</a>
+            <a href="account.html">Account Settings</a>
+
+            <a href="login.html"
+               id="notificationLogout">Logout</a>
+
+            <button type="button"
+                    id="languageToggle"
+                    class="language-toggle">
+            </button>
+        </nav>
+
+    </div>
+</header>
+
+<main class="section">
+    <div class="container">
+
+        <h2>Notification Center</h2>
+
+        <p>
+            Stay informed about emergency alerts,
+            request updates and important account activity.
+        </p>
+
+        <div class="notification-toolbar">
+
+            <h3 id="notificationCount">
+                Notifications
+            </h3>
+
+            <button type="button"
+                    id="markAllNotificationsRead">
+                Mark All as Read
+            </button>
+
+        </div>
+
+        <label for="notificationFilter">
+            Filter Notifications
+        </label>
+
+        <select id="notificationFilter">
+            <option value="all">All Notifications</option>
+            <option value="unread">Unread Notifications</option>
+            <option value="alerts">Emergency Alerts</option>
+            <option value="requests">Request Updates</option>
+            <option value="messages">Messages</option>
+            <option value="verification">Verification Updates</option>
+        </select>
+
+        <div id="notificationCenterList"></div>
+
+    </div>
+</main>
+
+<script src="js/language.js"></script>
+<script src="js/accounts.js"></script>
+<script src="js/notifications.js"></script>
+
+</body>
+</html>
