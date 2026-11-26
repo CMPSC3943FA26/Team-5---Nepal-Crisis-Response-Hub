@@ -21,6 +21,7 @@
             <script src="js/message-notifications.js"></script>
             <a href="messages.html">Messages</a>
             <a href="#missingManagement">Missing Persons</a>
+            <a href="#responderVerification">Responder Applications</a>
         </nav>
     </div>
 </header>
@@ -199,6 +200,41 @@
 </section>
 
 
+<section id="responderVerification" class="section">
+    <div class="container">
+
+        <h2>Responder Applications</h2>
+
+        <p>
+            Review responder credentials and approve
+            or reject professional verification requests.
+        </p>
+
+        <div id="responderVerificationStats"
+             class="cards"></div>
+
+        <label for="responderVerificationFilter">
+            Filter Applications
+        </label>
+
+        <select id="responderVerificationFilter">
+            <option value="all">All Applications</option>
+            <option value="Pending">Pending</option>
+            <option value="Approved">Approved</option>
+            <option value="Rejected">Rejected</option>
+        </select>
+
+        <div id="responderApplicationList"
+             class="cards"
+             style="margin-top: 20px;">
+        </div>
+
+        <p id="responderVerificationMessage"
+           role="status"></p>
+
+    </div>
+</section>
+
 
 </main>
 
@@ -215,5 +251,6 @@
 <script src="js/request-card.js"></script>
 <script src="js/admin.js"></script>
 <script src="js/missing-admin.js"></script>
+<script src="js/responder-verification.js"></script>
 </body>
 </html>

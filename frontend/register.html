@@ -31,13 +31,23 @@
             Create a prototype account to access assistance features.
         </p>
 
-        <label>
-        <input type="checkbox" id="registerVolunteer">
-        Register as a volunteer responder
-        </label>
 
 
         <form id="registerForm">
+
+
+        <label for="registerAccountType">Account Type</label>
+
+        <select id="registerAccountType" required>
+            <option value="user">Citizen / Resident</option>
+            <option value="responder">Emergency Responder</option>
+        </select>
+
+        <p class="prototype-warning">
+            Classroom demonstration only.
+            Use fictional identification and credential numbers.
+        </p>
+
 
             <label for="registerName">Full Name</label>
 
@@ -56,6 +66,127 @@
                 placeholder="Enter your email"
                 required
             >
+
+
+<label for="registerPhone">Phone Number</label>
+<input
+    id="registerPhone"
+    type="tel"
+    placeholder="Enter phone number"
+    required
+>
+
+<label for="registerDistrict">District</label>
+<input
+    id="registerDistrict"
+    type="text"
+    placeholder="Enter your district"
+    required
+>
+
+<!-- Citizen Identification -->
+
+<div id="citizenFields">
+
+    <h3>Citizen Identification</h3>
+
+    <label for="citizenIdType">Identification Type</label>
+
+    <select id="citizenIdType" required>
+        <option value="citizenship">Citizenship Number</option>
+        <option value="national">National ID Number</option>
+        <option value="passport">Passport Number</option>
+    </select>
+
+    <label for="citizenIdNumber">Identification Number</label>
+
+    <input
+        id="citizenIdNumber"
+        type="text"
+        placeholder="Example: DEMO-CIT-001"
+        maxlength="50"
+        required
+    >
+
+</div>
+
+<!-- Responder Credentials -->
+
+<div id="responderFields" hidden>
+
+    <h3>Professional Verification</h3>
+
+    <label for="responderOrganization">
+        Affiliated Organization
+    </label>
+
+    <input
+        id="responderOrganization"
+        type="text"
+        placeholder="Enter organization name"
+        disabled
+    >
+
+    <label for="responderOrgType">Organization Type</label>
+
+    <select id="responderOrgType" disabled>
+        <option value="">Select organization type</option>
+        <option>Nepal Police</option>
+        <option>Nepal Army</option>
+        <option>Armed Police Force</option>
+        <option>Nepal Red Cross Society</option>
+        <option>Hospital / Medical Services</option>
+        <option>Fire and Rescue Services</option>
+        <option>NGO / Volunteer Organization</option>
+        <option>Other</option>
+    </select>
+
+    <label for="responderPosition">Professional Role</label>
+
+    <input
+        id="responderPosition"
+        type="text"
+        placeholder="Example: Paramedic"
+        disabled
+    >
+
+    <label for="responderCredentialType">
+        Credential Type
+    </label>
+
+    <select id="responderCredentialType" disabled>
+        <option value="">Select credential type</option>
+        <option>Responder Certificate</option>
+        <option>Employee ID</option>
+        <option>Volunteer Membership ID</option>
+        <option>Professional License</option>
+    </select>
+
+    <label for="responderCredentialNumber">
+        Credential Number
+    </label>
+
+    <input
+        id="responderCredentialNumber"
+        type="text"
+        placeholder="Example: DEMO-RSP-001"
+        maxlength="50"
+        disabled
+    >
+
+    <p style="
+        background: #fff7ed;
+        border: 1px solid #fdba74;
+        border-radius: 8px;
+        padding: 12px;
+        margin: 15px 0;
+    ">
+        Responder accounts require administrator approval
+        before emergency response privileges are granted.
+    </p>
+
+</div>
+
 
             <label for="registerPassword">Password</label>
 
