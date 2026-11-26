@@ -801,7 +801,8 @@ if (
     const requestSafeButton = document.createElement("button");
 
     requestSafeButton.type = "button";
-    requestSasetInterfaceText(requestSafeButton, "Request to Mark as Safe");feButton.textContent = "Request to Mark as Safe";
+
+setInterfaceText(requestSafeButton, "Request to Mark as Safe");
 
     requestSafeButton.style.cssText = `
         background: #15803d;
